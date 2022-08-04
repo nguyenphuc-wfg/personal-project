@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class ShellExplosion : MonoBehaviour
 {
@@ -9,11 +11,13 @@ public class ShellExplosion : MonoBehaviour
     public float m_ExplosionForce = 1000f;            
     public float m_MaxLifeTime = 2f;                  
     public float m_ExplosionRadius = 5f;              
+    public MeshRenderer m_MeshRenderer;
+    public Light m_Light;
+    public Rigidbody m_Rigidbody;
 
-
-    private void Start()
+    private void OnEnable()
     {
-        Destroy(gameObject, m_MaxLifeTime);
+        StartCoroutine(ObjectDestroy((m_ExplosionParticles.duration)));
     }
 
 
@@ -39,18 +43,32 @@ public class ShellExplosion : MonoBehaviour
 
             targetHealth.TakeDamage(damage);
         }
-
+        m_MeshRenderer.enabled = false;
+        m_Light.enabled = false;
         m_ExplosionParticles.transform.parent = null;
 
         m_ExplosionParticles.Play();
 
         m_ExplosionAudio.Play();
 
-        Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
-        Destroy(gameObject);
+        
+        StartCoroutine(ObjectDestroy((m_ExplosionParticles.duration)));
     }
 
-
+    private IEnumerator ObjectDestroy(float time){
+        yield return new WaitForSeconds(time);
+        
+        gameObject.SetActive(false);
+        gameObject.transform.rotation = Quaternion.identity;
+        gameObject.transform.position = Vector3.zero;
+        
+        m_Rigidbody.isKinematic = true;
+        m_MeshRenderer.enabled = true;
+        m_Light.enabled = true;
+        m_ExplosionParticles.transform.SetParent(this.gameObject.transform);
+        m_ExplosionParticles.transform.localPosition = Vector3.zero;
+    }
+    
     private float CalculateDamage(Vector3 targetPosition)
     {
         // Calculate the amount of damage a target should take based on it's position.

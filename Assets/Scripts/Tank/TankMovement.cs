@@ -3,8 +3,9 @@
 public class TankMovement : MonoBehaviour
 {
     public int m_PlayerNumber = 1;         
-    public float m_Speed = 12f;            
-    public float m_TurnSpeed = 180f;       
+    private float m_Speed;            
+    private float m_TurnSpeed;     
+    public TankStats m_TankStats;
     public AudioSource m_MovementAudio;    
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
@@ -13,7 +14,7 @@ public class TankMovement : MonoBehaviour
 
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
-    private Rigidbody m_Rigidbody;         
+    [SerializeField] private Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
     private float m_OriginalPitch;         
@@ -21,7 +22,8 @@ public class TankMovement : MonoBehaviour
 
     private void Awake()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
+        m_Speed = m_TankStats.M_Speed;
+        m_TurnSpeed = m_TankStats.M_TurnSpeed;
     }
 
 

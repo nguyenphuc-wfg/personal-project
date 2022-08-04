@@ -8,7 +8,7 @@ public class CameraControl : MonoBehaviour
     [HideInInspector] public Transform[] m_Targets; 
 
 
-    private Camera m_Camera;                        
+    [SerializeField] private Camera m_Camera;                        
     private float m_ZoomSpeed;                      
     private Vector3 m_MoveVelocity;                 
     private Vector3 m_DesiredPosition;              
@@ -16,7 +16,6 @@ public class CameraControl : MonoBehaviour
 
     private void Awake()
     {
-        m_Camera = GetComponentInChildren<Camera>();
     }
 
 

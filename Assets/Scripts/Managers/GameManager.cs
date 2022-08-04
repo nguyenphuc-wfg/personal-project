@@ -1,41 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine.Events;
+                                               
 public class GameManager : MonoBehaviour
 {
-    public int m_NumRoundsToWin = 5;        
-    public float m_StartDelay = 3f;         
-    public float m_EndDelay = 3f;           
+    public int m_NumRoundsToWin = 5;                 
     public CameraControl m_CameraControl;   
-    public Text m_MessageText;              
     public GameObject m_TankPrefab;         
-    public TankManager[] m_Tanks;           
+    public TankManager[] m_Tanks;         
 
+    public static int m_StartDelay = 3000;         
+    public static int m_EndDelay = 3000; 
 
-    private int m_RoundNumber;              
-    private WaitForSeconds m_StartWait;     
-    private WaitForSeconds m_EndWait;       
+    private int m_RoundNumber;                   
     private TankManager m_RoundWinner;
-    private TankManager m_GameWinner;       
-
+    private TankManager m_GameWinner;
+    
     const float k_MaxDepenetrationVelocity = float.PositiveInfinity;
+
+    [SerializeField] private UIStats m_UIStats;
+    public UnityEvent ChangeUIEvent;
 
     private void Start()
     {
         // This line fixes a change to the physics engine.
         Physics.defaultMaxDepenetrationVelocity = k_MaxDepenetrationVelocity;
-        
-        m_StartWait = new WaitForSeconds(m_StartDelay);
-        m_EndWait = new WaitForSeconds(m_EndDelay);
 
         SpawnAllTanks();
         SetCameraTargets();
 
-        StartCoroutine(GameLoop());
+        GameLoop();
     }
-
 
     private void SpawnAllTanks()
     {
@@ -61,51 +61,64 @@ public class GameManager : MonoBehaviour
         m_CameraControl.m_Targets = targets;
     }
 
+    public async void GameLoop(){
+        await StartMatch();
+        await PlayMatch();
+        await EndMatch();
+    }
+    
+    private async UniTask StartMatch(){
+        
+        RoundStarting();
 
-    private IEnumerator GameLoop()
-    {
-        yield return StartCoroutine(RoundStarting());
-        yield return StartCoroutine(RoundPlaying());
-        yield return StartCoroutine(RoundEnding());
+        await UniTask.Delay(m_StartDelay);
 
-        if (m_GameWinner != null)
-        {
-            SceneManager.LoadScene(0);
-        }
-        else
-        {
-            StartCoroutine(GameLoop());
-        }
+    }
+    
+    private async UniTask PlayMatch(){
+
+        RoundPlaying();
     }
 
+    private async UniTask EndMatch(){
+        
+        await UniTask.WaitUntil(() => OneTankLeft());
+        
+        RoundEnding();
+       
+        await UniTask.Delay(m_EndDelay);
 
-    private IEnumerator RoundStarting()
+        if (IsMatchEnding()){
+            SceneManager.LoadScene(0);
+        } else {
+            GameLoop();
+        }
+        
+    }
+
+    public void RoundStarting()
     {
         ResetAllTanks();
         DisableTankControl();
 
         m_CameraControl.SetStartPositionAndSize();
-
         m_RoundNumber++;
-        m_MessageText.text = "ROUND" + m_RoundNumber;
+        m_UIStats.message = $"ROUND {m_RoundNumber}";
+        ChangeUIEvent.Invoke();
 
-        yield return m_StartWait;
     }
 
 
-    private IEnumerator RoundPlaying()
+    public void RoundPlaying()
     {
         EnableTankControl();
 
-        m_MessageText.text = string.Empty;
-
-        while (!OneTankLeft()){
-            yield return null;
-        }
+        m_UIStats.message =  string.Empty;
+        ChangeUIEvent.Invoke();
     }
 
 
-    private IEnumerator RoundEnding()
+    public void RoundEnding()
     {
         DisableTankControl();
 
@@ -120,13 +133,19 @@ public class GameManager : MonoBehaviour
         m_GameWinner = GetGameWinner();
 
         string message = EndMessage();
-        m_MessageText.text = message;
+        m_UIStats.message = message;
+        ChangeUIEvent.Invoke();
 
-        yield return m_EndWait;
     }
-
-
-    private bool OneTankLeft()
+    public bool IsMatchEnding(){
+        return (m_GameWinner != null);
+    }
+    // public void TankLeft(){
+    //     if (OneTankLeft()){
+    //         // UIManager.Instance.EndMatchLoop();
+    //     }
+    // }
+    public bool OneTankLeft()
     {
         int numTanksLeft = 0;
 
