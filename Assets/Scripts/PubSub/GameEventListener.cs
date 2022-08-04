@@ -6,14 +6,14 @@ public class GameEventListener : MonoBehaviour {
     public UnityEvent Response;
 
     private void OnEnable() {
-        Event.SubscribeListener(this);
+        Event.SubscribeListener(OnEventExcute);
     }
 
     private void OnDisable() {
-        Event.UnSubscribeListener(this);
+        Event.UnSubscribeListener(OnEventExcute);
     }
 
     public void OnEventExcute(){
-        Response.Invoke();
+        Response?.Invoke();
     }
 }

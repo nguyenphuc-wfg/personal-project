@@ -1,26 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(fileName = "GameEvent", menuName = "Tanks/GameEvent", order = 0)]
 public class GameEvent : ScriptableObject {
-    private readonly List<GameEventListener> eventListeners = new List<GameEventListener>();
+    private Action eventListeners = null;
 
     public void Excute(){
-        foreach (GameEventListener item in eventListeners){
-            item.OnEventExcute();
-        }
+        eventListeners?.Invoke();
     }
 
-    public void SubscribeListener(GameEventListener listener){
-        if (!eventListeners.Contains(listener)){
-            eventListeners.Add(listener);
-        }
+    public void SubscribeListener(Action listener){
+        eventListeners -= listener;
+        eventListeners += listener;
     }
 
-    public void UnSubscribeListener(GameEventListener listener){
-        if (eventListeners.Contains(listener)){
-            eventListeners.Remove(listener);
-        }
+    public void UnSubscribeListener(Action listener){
+        eventListeners -= listener;
     }
 }

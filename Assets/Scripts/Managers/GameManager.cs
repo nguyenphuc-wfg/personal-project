@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
-                                               
 public class GameManager : MonoBehaviour
 {
     public int m_NumRoundsToWin = 5;                 
