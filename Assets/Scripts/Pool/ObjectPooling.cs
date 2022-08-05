@@ -50,4 +50,11 @@ public class ObjectPooling : MonoBehaviour
         obj.gameObject.SetActive(false);
         return obj;
     }
+
+    public void ReturnPool(){
+        foreach (Rigidbody item in bulletPool) {
+            item.isKinematic = true;
+            item.gameObject.SetActive(false);
+        }
+    }
 }

@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class TankShooting : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;       
-    public Rigidbody m_Shell;            
+    public int m_PlayerNumber = 1;               
     public Transform m_FireTransform;    
     public Slider m_AimSlider;           
     public AudioSource m_ShootingAudio;  
@@ -72,10 +71,12 @@ public class TankShooting : MonoBehaviour
 
         Rigidbody shellInstance = ObjectPooling.Instance.GetBullet();
         
+
+        
         shellInstance.isKinematic = false;
         shellInstance.gameObject.transform.position = m_FireTransform.position;
         shellInstance.gameObject.transform.rotation = m_FireTransform.rotation;
-
+        
         shellInstance.gameObject.SetActive(true);
 
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;

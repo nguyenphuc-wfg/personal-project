@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 public class ShellExplosion : MonoBehaviour
 {
@@ -14,18 +16,19 @@ public class ShellExplosion : MonoBehaviour
     public MeshRenderer m_MeshRenderer;
     public Light m_Light;
     public Rigidbody m_Rigidbody;
-
+    public CapsuleCollider m_BoxCollider;
     private void OnEnable()
     {
-        StartCoroutine(ObjectDestroy((m_ExplosionParticles.duration)));
+        m_BoxCollider.enabled = true;
+        // ObjectDestroy(m_ExplosionParticles.duration);
     }
 
-
-    private void OnTriggerEnter(Collider other)
+    private async void OnCollisionEnter(Collision other)
     {
+        if (other.gameObject.tag != "Player") return;
         // Find all the tanks in an area around the shell and damage them.
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
-
+        
         for (int i=0; i< colliders.Length; i++) {
             Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
 
@@ -50,23 +53,24 @@ public class ShellExplosion : MonoBehaviour
         m_ExplosionParticles.Play();
 
         m_ExplosionAudio.Play();
-
         
-        StartCoroutine(ObjectDestroy((m_ExplosionParticles.duration)));
+        await ObjectDestroy(m_ExplosionParticles.main.duration);
+    
     }
 
-    private IEnumerator ObjectDestroy(float time){
-        yield return new WaitForSeconds(time);
-        
-        gameObject.SetActive(false);
-        gameObject.transform.rotation = Quaternion.identity;
-        gameObject.transform.position = Vector3.zero;
-        
+    private async UniTask ObjectDestroy(float time){
         m_Rigidbody.isKinematic = true;
+        m_BoxCollider.enabled = false;
+
+        await UniTask.Delay((int)(time*1000));
+
         m_MeshRenderer.enabled = true;
         m_Light.enabled = true;
         m_ExplosionParticles.transform.SetParent(this.gameObject.transform);
         m_ExplosionParticles.transform.localPosition = Vector3.zero;
+
+        m_Rigidbody.isKinematic = false;
+        gameObject.SetActive(false);
     }
     
     private float CalculateDamage(Vector3 targetPosition)

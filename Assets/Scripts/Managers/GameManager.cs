@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UIStats m_UIStats;
     public UnityEvent ChangeUIEvent;
+    public GameEvent Event;
 
     private void Start()
     {
@@ -35,7 +36,12 @@ public class GameManager : MonoBehaviour
 
         GameLoop();
     }
-
+    private void OnEnable(){
+        Event.SubscribeListener(EndingGame);
+    }
+    private void OnDisable(){
+        Event.UnSubscribeListener(EndingGame);
+    }
     private void SpawnAllTanks()
     {
         for (int i = 0; i < m_Tanks.Length; i++)
@@ -63,7 +69,6 @@ public class GameManager : MonoBehaviour
     public async void GameLoop(){
         await StartMatch();
         await PlayMatch();
-        await EndMatch();
     }
     
     private async UniTask StartMatch(){
@@ -78,7 +83,9 @@ public class GameManager : MonoBehaviour
 
         RoundPlaying();
     }
-
+    public void EndingGame(){
+        EndMatch();
+    }
     private async UniTask EndMatch(){
         
         await UniTask.WaitUntil(() => OneTankLeft());
@@ -97,6 +104,8 @@ public class GameManager : MonoBehaviour
 
     public void RoundStarting()
     {
+        ObjectPooling.Instance.ReturnPool();
+
         ResetAllTanks();
         DisableTankControl();
 

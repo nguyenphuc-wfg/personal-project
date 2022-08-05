@@ -14,7 +14,7 @@ public class TankMovement : MonoBehaviour
 
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
-    [SerializeField] private Rigidbody m_Rigidbody;         
+    public Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
     private float m_OriginalPitch;         
@@ -37,7 +37,7 @@ public class TankMovement : MonoBehaviour
 
     private void OnDisable ()
     {
-        m_Rigidbody.isKinematic = true;
+        // m_Rigidbody.isKinematic = true;
     }
 
 

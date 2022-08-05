@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class TankHealth : MonoBehaviour
 {
+    public UnityEvent deathEvent;
+    [SerializeField] private TankExist tankExist;
     public float m_StartingHealth = 100f;          
     public Slider m_Slider;                        
     public Image m_FillImage;                      
     public Color m_FullHealthColor = Color.green;  
     public Color m_ZeroHealthColor = Color.red;    
     public GameObject m_ExplosionPrefab;
-    
 
     [SerializeField] private AudioSource m_ExplosionAudio;          
     [SerializeField] private ParticleSystem m_ExplosionParticles;   
@@ -19,6 +21,7 @@ public class TankHealth : MonoBehaviour
 
     private void Awake()
     {
+
         m_ExplosionPrefab.transform.parent = null;
 
         m_ExplosionParticles.gameObject.SetActive(false);
@@ -69,7 +72,9 @@ public class TankHealth : MonoBehaviour
         m_ExplosionAudio.Play();
 
         gameObject.SetActive(false);
-        
+
+        tankExist.tanksAmount -= 1;
+        deathEvent.Invoke();
         // GameManager.Instance.TankLeft();
     }
 }

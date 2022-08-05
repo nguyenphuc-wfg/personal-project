@@ -45,6 +45,8 @@ public class TankManager
     {
         m_Movement.enabled = false;
         m_Shooting.enabled = false;
+        
+        m_Movement.m_Rigidbody.isKinematic = true;
 
         m_CanvasGameObject.SetActive(false);
     }
