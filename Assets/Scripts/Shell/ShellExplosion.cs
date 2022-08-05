@@ -17,12 +17,11 @@ public class ShellExplosion : MonoBehaviour
     public Light m_Light;
     public Rigidbody m_Rigidbody;
     public CapsuleCollider m_BoxCollider;
-    private void OnEnable()
+    private async void OnEnable()
     {
         m_BoxCollider.enabled = true;
-        // ObjectDestroy(m_ExplosionParticles.duration);
+        await ObjectDestroy(m_MaxLifeTime);
     }
-
     private async void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag != "Player") return;
@@ -53,17 +52,17 @@ public class ShellExplosion : MonoBehaviour
         m_ExplosionParticles.Play();
 
         m_ExplosionAudio.Play();
-        
+        m_Rigidbody.isKinematic = true;
+        m_BoxCollider.enabled = false;
         await ObjectDestroy(m_ExplosionParticles.main.duration);
     
     }
 
     private async UniTask ObjectDestroy(float time){
-        m_Rigidbody.isKinematic = true;
-        m_BoxCollider.enabled = false;
 
         await UniTask.Delay((int)(time*1000));
 
+        Debug.Log(!gameObject.activeSelf);
         m_MeshRenderer.enabled = true;
         m_Light.enabled = true;
         m_ExplosionParticles.transform.SetParent(this.gameObject.transform);
