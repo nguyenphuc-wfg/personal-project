@@ -59,7 +59,7 @@ public class ObjectPooling : MonoBehaviour
     }
 
     public GameObject CreateNewObject(GameObject obj){
-        GameObject objInstance = Instantiate(obj , Vector3.zero, Quaternion.identity);
+        GameObject objInstance = Instantiate(obj);
         objInstance.SetActive(false);
         return objInstance;
     }

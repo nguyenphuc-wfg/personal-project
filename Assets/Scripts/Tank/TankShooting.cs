@@ -1,25 +1,34 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 public class TankShooting : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;               
-    public Transform m_FireTransform;    
-    public Slider m_AimSlider;           
-    public AudioSource m_ShootingAudio;  
-    public AudioClip m_ChargingClip;     
-    public AudioClip m_FireClip;         
-    public float m_MinLaunchForce = 15f; 
-    public float m_MaxLaunchForce = 30f; 
+    public int m_PlayerNumber = 1;
+    public Transform m_FireTransform;
+    public Slider m_AimSlider;
+    public AudioSource m_ShootingAudio;
+    public AudioClip m_ChargingClip;
+    public AudioClip m_FireClip;
+    public float m_MinLaunchForce = 15f;
+    public float m_MaxLaunchForce = 30f;
     public float m_MaxChargeTime = 0.75f;
 
 
-    private string m_FireButton;         
-    private float m_CurrentLaunchForce;  
-    private float m_ChargeSpeed;         
-    private bool m_Fired;                
+    private string m_FireButton;
+    private float m_CurrentLaunchForce;
+    private float m_ChargeSpeed;
+    private bool m_Fired;
+    private bool m_IsFiring;
+    [SerializeField] private int numOfBullet;
+    [SerializeField] private float speedShoot;
+    private float timeCount;
 
-
+    [SerializeField] private float bulletInterval = 1;
+    [SerializeField] private float currentBulletInterval = 1;
+    [SerializeField] private float currentFireInterval = 1;
+    private int currentFiredBullet = 1;
     private void OnEnable()
     {
         m_CurrentLaunchForce = m_MinLaunchForce;
@@ -37,43 +46,47 @@ public class TankShooting : MonoBehaviour
 
     private void Update()
     {
-        // Track the current state of the fire button and make decisions based on the current launch force.
-        m_AimSlider.value = m_MinLaunchForce;
+        if (Input.GetButtonDown(m_FireButton) && !m_IsFiring && timeCount < 0)
+            m_IsFiring = true;
 
-        if (m_CurrentLaunchForce >= m_MaxLaunchForce && ! m_Fired){
-            m_CurrentLaunchForce = m_MaxLaunchForce;
-            Fire();
-        } 
-        else if (Input.GetButtonDown(m_FireButton)){
-            m_Fired = false;
-            m_CurrentLaunchForce = m_MinLaunchForce;
-
-            m_ShootingAudio.clip = m_ChargingClip;
-            m_ShootingAudio.Play();
-        } 
-        else if (Input.GetButton(m_FireButton) && !m_Fired){
-            m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
-
-            m_AimSlider.value = m_CurrentLaunchForce;
-        } 
-        else if (Input.GetButtonUp(m_FireButton) && !m_Fired){
-            Fire();
-        }
+        if (m_IsFiring)
+            UpdateFire();
+        else 
+            timeCount -= Time.deltaTime;
     }
 
+    private void UpdateFire()
+    {
+        currentBulletInterval -= Time.deltaTime;
+        if (currentBulletInterval > 0)
+            return;
+        FireOneBullet();
+    }
+
+    private void FireOneBullet()
+    {
+        currentBulletInterval = bulletInterval;
+        Fire();
+        currentFiredBullet++;
+        if (currentFiredBullet >= numOfBullet)
+        {
+            currentFiredBullet = 0;
+            m_IsFiring = false;
+            timeCount = currentFireInterval;
+        }
+    }
 
     private void Fire()
     {
         // Instantiate and launch the shell.
-        m_Fired = true;
 
         // Get Pooling Bullet
         GameObject obj = ObjectPooling.Instance.GetObject("Bullet");
         obj.transform.position = m_FireTransform.position;
         obj.transform.rotation = m_FireTransform.rotation;
-    
+
         Rigidbody shellInstance = obj.GetComponent<Rigidbody>();
-        
+
         shellInstance.isKinematic = false;
 
 
