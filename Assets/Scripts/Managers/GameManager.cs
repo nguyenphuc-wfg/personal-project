@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     public void RoundStarting()
     {
-        ObjectPooling.Instance.ReturnPool();
+        ObjectPooling.Instance.ReturnAllPool();
 
         ResetAllTanks();
         DisableTankControl();

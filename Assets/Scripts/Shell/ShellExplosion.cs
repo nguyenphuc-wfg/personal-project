@@ -17,12 +17,17 @@ public class ShellExplosion : MonoBehaviour
     public Light m_Light;
     public Rigidbody m_Rigidbody;
     public CapsuleCollider m_BoxCollider;
-    private async void OnEnable()
+    private CancellationTokenSource cts;
+    private void OnEnable()
     {
         m_BoxCollider.enabled = true;
-        await ObjectDestroy(m_MaxLifeTime);
+        
+        ObjectDestroy(m_MaxLifeTime);
     }
-    private async void OnCollisionEnter(Collision other)
+    private void OnDisable() {
+        cts?.Cancel();
+    }
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag != "Player") return;
         // Find all the tanks in an area around the shell and damage them.
@@ -54,15 +59,19 @@ public class ShellExplosion : MonoBehaviour
         m_ExplosionAudio.Play();
         m_Rigidbody.isKinematic = true;
         m_BoxCollider.enabled = false;
-        await ObjectDestroy(m_ExplosionParticles.main.duration);
-    
+
+        cts?.Cancel();
+        ObjectDestroy(m_ExplosionParticles.main.duration);
+
     }
 
     private async UniTask ObjectDestroy(float time){
+        cts = new CancellationTokenSource();
 
-        await UniTask.Delay((int)(time*1000));
+        await UniTask.Delay((int)(time*1000), cancellationToken: cts.Token);
 
-        Debug.Log(!gameObject.activeSelf);
+        cts = null;
+
         m_MeshRenderer.enabled = true;
         m_Light.enabled = true;
         m_ExplosionParticles.transform.SetParent(this.gameObject.transform);

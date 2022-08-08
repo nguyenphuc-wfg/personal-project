@@ -4,8 +4,9 @@ using UnityEngine;
 
 [System.Serializable]
 public class ObjPool {
-    public Rigidbody gameObject;
+    public GameObject gameObject;
     public int count;
+    public string tag;
 }
 
 public class ObjectPooling : MonoBehaviour 
@@ -13,9 +14,9 @@ public class ObjectPooling : MonoBehaviour
     private static ObjectPooling instance;
     public static ObjectPooling Instance {get{return instance;}}
 
-    [SerializeField] ObjPool bullet;
+    [SerializeField] List<ObjPool> listPrefabs = new List<ObjPool>();
 
-    private List<Rigidbody> bulletPool = new List<Rigidbody>();
+    private Dictionary<string, List<GameObject>> pool = new Dictionary<string, List<GameObject>>();
 
     private void Awake() {
         if (instance == null) {
@@ -24,37 +25,50 @@ public class ObjectPooling : MonoBehaviour
     }
 
     private void Start() {
-        CreatePool(bullet, bulletPool);
+        CreatePool();
     }
 
-    private void CreatePool(ObjPool objp, List<Rigidbody> pool){
-        for (int i = 0; i < objp.count; i++) {
-            Rigidbody obj = CreateNewGO(objp.gameObject);
-            pool.Add(obj);
+    private void CreatePool(){
+        foreach (ObjPool item in listPrefabs){
+            List<GameObject> prefabs = new List<GameObject>();
+            for (int i = 0; i < item.count; i++) {
+                GameObject obj = CreateNewObject(item.gameObject);
+                prefabs.Add(obj);
+            }
+            pool.Add(item.tag, prefabs);
         }
     }
+    public GameObject GetObject(string tag){
+        if (!pool.ContainsKey(tag)) return null;
 
-    public Rigidbody GetBullet(){
-        foreach (Rigidbody item in bulletPool) {
-            if (!item.gameObject.activeSelf) {
+        foreach (GameObject item in pool[tag]) {
+            if (!item.activeSelf) {
+                item.SetActive(true);
                 return item;
             }
         }
-        Rigidbody obj = CreateNewGO(bullet.gameObject);
-        bulletPool.Add(obj);
-        return obj;
+
+        foreach (ObjPool item in listPrefabs){
+            if (item.tag != tag) continue;
+            GameObject obj = CreateNewObject(item.gameObject);
+            pool[tag].Add(obj);
+            obj.SetActive(true);
+            return obj;
+        }
+        return null;
     }
 
-    public Rigidbody CreateNewGO(Rigidbody go){
-        Rigidbody obj = Instantiate(go, Vector3.zero, Quaternion.identity); 
-        obj.gameObject.SetActive(false);
-        return obj;
+    public GameObject CreateNewObject(GameObject obj){
+        GameObject objInstance = Instantiate(obj , Vector3.zero, Quaternion.identity);
+        objInstance.SetActive(false);
+        return objInstance;
     }
 
-    public void ReturnPool(){
-        foreach (Rigidbody item in bulletPool) {
-            item.isKinematic = true;
-            item.gameObject.SetActive(false);
+    public void ReturnAllPool(){
+        foreach (var item in pool) {
+            foreach (GameObject obj in item.Value) {
+                obj.SetActive(false);
+            }
         }
     }
 }

@@ -68,16 +68,14 @@ public class TankShooting : MonoBehaviour
         m_Fired = true;
 
         // Get Pooling Bullet
-
-        Rigidbody shellInstance = ObjectPooling.Instance.GetBullet();
-        
-
+        GameObject obj = ObjectPooling.Instance.GetObject("Bullet");
+        obj.transform.position = m_FireTransform.position;
+        obj.transform.rotation = m_FireTransform.rotation;
+    
+        Rigidbody shellInstance = obj.GetComponent<Rigidbody>();
         
         shellInstance.isKinematic = false;
-        shellInstance.gameObject.transform.position = m_FireTransform.position;
-        shellInstance.gameObject.transform.rotation = m_FireTransform.rotation;
-        
-        shellInstance.gameObject.SetActive(true);
+
 
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
 
