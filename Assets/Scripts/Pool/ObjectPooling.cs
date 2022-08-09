@@ -38,11 +38,13 @@ public class ObjectPooling : MonoBehaviour
             pool.Add(item.tag, prefabs);
         }
     }
-    public GameObject GetObject(string tag){
+    public GameObject GetObject(string tag, Vector3 pos, Quaternion rot){
         if (!pool.ContainsKey(tag)) return null;
 
         foreach (GameObject item in pool[tag]) {
             if (!item.activeSelf) {
+                item.transform.position = pos;
+                item.transform.rotation = rot;
                 item.SetActive(true);
                 return item;
             }
@@ -52,6 +54,8 @@ public class ObjectPooling : MonoBehaviour
             if (item.tag != tag) continue;
             GameObject obj = CreateNewObject(item.gameObject);
             pool[tag].Add(obj);
+            obj.transform.position = pos;
+            obj.transform.rotation = rot;
             obj.SetActive(true);
             return obj;
         }

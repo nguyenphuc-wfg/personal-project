@@ -13,7 +13,7 @@ public class TankManager
 
 
     private TankMovement m_Movement;       
-    private TankShooting m_Shooting;
+    private Weapon m_Shooting;
     private GameObject m_CanvasGameObject;
 
     private TankGroup m_TankGroup;
@@ -28,7 +28,7 @@ public class TankManager
         m_CanvasGameObject = m_TankGroup.m_CanvasGameObject;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
-        m_Shooting.m_PlayerNumber = m_PlayerNumber;
+       // m_Shooting.m_PlayerNumber = m_PlayerNumber;
 
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
@@ -46,6 +46,7 @@ public class TankManager
         m_Movement.enabled = false;
         m_Shooting.enabled = false;
         
+        m_Shooting.ResetWeapon();
         m_Movement.m_Rigidbody.isKinematic = true;
 
         m_CanvasGameObject.SetActive(false);

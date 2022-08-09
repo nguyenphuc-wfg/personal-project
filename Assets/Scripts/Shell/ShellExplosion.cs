@@ -21,6 +21,7 @@ public class ShellExplosion : MonoBehaviour
         m_BoxCollider.enabled = true;
         
         ObjectDestroy(m_MaxLifeTime);
+        m_Rigidbody.velocity = transform.forward * 15f;
     }
     private void OnDisable() {
         cts?.Cancel();
@@ -50,7 +51,7 @@ public class ShellExplosion : MonoBehaviour
         }
         m_Light.enabled = false;
 
-        m_ExplosionParticles = ObjectPooling.Instance.GetObject("Explosion").GetComponent<ParticleSystem>();
+        // m_ExplosionParticles = ObjectPooling.Instance.GetObject("Explosion").GetComponent<ParticleSystem>();
 
         m_ExplosionParticles.transform.position = transform.position;
         m_ExplosionParticles.Play();
@@ -71,6 +72,7 @@ public class ShellExplosion : MonoBehaviour
         cts = null;
 
         m_Rigidbody.isKinematic = false;
+        Destroy(gameObject);
         gameObject.SetActive(false);
     }
     
