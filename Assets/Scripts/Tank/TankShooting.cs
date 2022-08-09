@@ -26,20 +26,20 @@ public class TankShooting : MonoBehaviour
     private float timeCount;
 
     [SerializeField] private float bulletInterval = 1;
-    [SerializeField] private float currentBulletInterval = 1;
-    [SerializeField] private float currentFireInterval = 1;
-    private int currentFiredBullet = 1;
+    private float currentBulletInterval = 1;
+    private float currentFireInterval;
+    private int currentFiredBullet = 0;
     private void OnEnable()
     {
-        m_CurrentLaunchForce = m_MinLaunchForce;
-        m_AimSlider.value = m_MinLaunchForce;
+        // m_CurrentLaunchForce = m_MinLaunchForce;
+        // m_AimSlider.value = m_MinLaunchForce;
     }
 
 
     private void Start()
     {
         m_FireButton = "Fire" + m_PlayerNumber;
-
+        currentBulletInterval = bulletInterval;
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
     }
 
@@ -90,11 +90,11 @@ public class TankShooting : MonoBehaviour
         shellInstance.isKinematic = false;
 
 
-        shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
+        shellInstance.velocity = m_MaxLaunchForce * m_FireTransform.forward;
 
         m_ShootingAudio.clip = m_FireClip;
         m_ShootingAudio.Play();
 
-        m_CurrentLaunchForce = m_MinLaunchForce;
+        // m_CurrentLaunchForce = m_MinLaunchForce;
     }
 }
