@@ -1,20 +1,24 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BulletFindWay : Bullet {
-    [SerializeField] private Transform target;
+    private Transform target;
     [SerializeField] private int _damage = 100;
     [SerializeField] private Light _light;
     [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] private GameObject _explosion;
     [SerializeField] private float _speed;
     [SerializeField] private float _radarRadius;
+    [SerializeField] private NavMeshAgent _navMeshAgent;
     public LayerMask _radarMask;
-
+    private void Start() {
+        _navMeshAgent.speed = _speed;
+    }
     private void OnEnable() {
         _rigidbody.isKinematic = false;
         _rigidbody.velocity = transform.forward * _speed;
     }
     private void Update() {
+        _rigidbody.AddTorque(transform.forward * _speed * 1000);
         FollowTargetWithRotation();
         Radaring();
     }
@@ -26,11 +30,11 @@ public class BulletFindWay : Bullet {
     private void OnCollisionEnter(Collision target){
         TankHealth targetHealth = target.gameObject.GetComponent<TankHealth>();
 
-        if (targetHealth)
+        if (targetHealth) {
             targetHealth.TakeDamage(_damage);
-
-        GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
-        gameObject.SetActive(false);
+            GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
+            gameObject.SetActive(false);
+        }
     }
     private void Radaring(){
         if (target != null) return;
@@ -39,17 +43,13 @@ public class BulletFindWay : Bullet {
         foreach (var collider in colliders){
             if (collider.gameObject != _owner) {
                 target = collider.gameObject.transform;
+                return;
             }
         }
     }
     private void FollowTargetWithRotation()
     {
         if (target == null) return;
-        transform.LookAt(target);
-        if (Vector3.Distance(transform.position, target.position) > 0)
-        {
-            transform.LookAt(target);
-            GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * _speed/2, ForceMode.Force);
-        }
+        _navMeshAgent.destination = target.position;
     }
 }

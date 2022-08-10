@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
 
     public void RoundEnding()
     {
+        ClearTankEffect();
         DisableTankControl();
         ObjectPooling.Instance.ReturnAllPool();
         m_RoundWinner = null;
@@ -235,6 +236,12 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < m_Tanks.Length; i++)
         {
             m_Tanks[i].DisableControl();
+        }
+    }
+
+    private void ClearTankEffect(){
+        for (int i=0; i< m_Tanks.Length; i++){
+            m_Tanks[i].ClearTankEffect();
         }
     }
 }

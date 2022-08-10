@@ -17,13 +17,14 @@ public class TankManager
     private GameObject m_CanvasGameObject;
 
     private TankGroup m_TankGroup;
-
+    private TankComponent m_TankComponent;
 
     public void Setup()
     {
         m_TankGroup = m_Instance.GetComponent<TankGroup>();
+        m_TankComponent = m_Instance.GetComponent<TankComponent>();
 
-        m_Movement = m_TankGroup.m_Movement;
+        m_Movement = m_TankGroup.m_Movement;    
         m_Shooting = m_TankGroup.m_Shooting;
         m_CanvasGameObject = m_TankGroup.m_CanvasGameObject;
 
@@ -61,9 +62,12 @@ public class TankManager
         m_CanvasGameObject.SetActive(true);
     }
 
-
+    public void ClearTankEffect(){
+        m_TankComponent.TankEffect.ClearEffect();
+    }
     public void Reset()
     {
+
         m_Instance.transform.position = m_SpawnPoint.position;
         m_Instance.transform.rotation = m_SpawnPoint.rotation;
 

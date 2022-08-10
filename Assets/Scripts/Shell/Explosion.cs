@@ -9,6 +9,7 @@ public class Explosion : MonoBehaviour
     [SerializeField] private float _explosionForce = 100f;
     [SerializeField] private float _explosionRadius = 5f;
     [SerializeField] private float _maxDamage = 100f;
+    [SerializeField] private Effect _effectDamage;
     public LayerMask _explosionMask;
     private void OnEnable() {
         transform.rotation = Quaternion.Euler(-90f, 0, 0);
@@ -27,13 +28,11 @@ public class Explosion : MonoBehaviour
             if (!targetRigidbody) continue;
             targetRigidbody.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
 
-            TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth>();
-
-            if (!targetHealth) continue;
-
+            TankComponent tankComponent = targetRigidbody.GetComponent<TankComponent>();
+            if (!tankComponent) return;
+            EffectDamage effect = (EffectDamage) tankComponent.TankEffect.AddEffect(_effectDamage);
             float damage = CalculateDamage(targetRigidbody.position);
-
-            targetHealth.TakeDamage(damage);
+            effect.SetDamage(damage);
         }
     }
     private float CalculateDamage(Vector3 targetPosition)

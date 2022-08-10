@@ -38,7 +38,7 @@ public abstract class Weapon : MonoBehaviour
     // }
 
     // private void Fire()
-    // {
+    // 
 
     //     GameObject obj = ObjectPooling.Instance.GetObject("Bullet");
     //     obj.transform.position = m_FireTransform.position;

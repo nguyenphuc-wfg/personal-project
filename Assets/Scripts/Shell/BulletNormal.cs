@@ -5,7 +5,7 @@ public class BulletNormal : Bullet {
     [SerializeField] private Light _light;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private float _speed;
-
+    [SerializeField] private Effect _effectDamage;
     private void OnEnable() {
         _rigidbody.isKinematic = false;
         _rigidbody.velocity = transform.forward * _speed;
@@ -16,10 +16,12 @@ public class BulletNormal : Bullet {
     }   
 
     private void OnCollisionEnter(Collision target) {
-    
-        TankHealth targetHealth = target.gameObject.GetComponent<TankHealth>();
-        if (targetHealth) 
-            targetHealth.TakeDamage(_damage);
+        TankComponent tankComponent = target.gameObject.GetComponent<TankComponent>();
+        if (tankComponent) {
+            EffectDamage effect = (EffectDamage) tankComponent.TankEffect.AddEffect(_effectDamage);
+            effect.SetDamage(_damage);
+        }
+          
         GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
