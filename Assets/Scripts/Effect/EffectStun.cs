@@ -8,23 +8,21 @@ public class EffectStun : Effect {
     }
     protected override void ApplyEffect(){
         List<Effect> listEffect = _target.TankEffect.ListEffect;
-        foreach (var item in listEffect){
-            if (item.GetType() == typeof(EffectImmune)) {
+        for (int i=0 ; i<listEffect.Count; i++){
+            if (listEffect[i].GetType() == typeof(EffectImmune)) {
                 _target.TankEffect.RemoveEffect(_effect);
                 return;
             }
         }
         _target.OnStun();
     }
-    protected override void TimeOutEffect(){
-        Debug.Log("offstun");
+    public override void OnBeforeDestroy(){
         List<Effect> listEffect = _target.TankEffect.ListEffect;
-        foreach (var item in listEffect){
-            if (item.GetType() == typeof(EffectStun))
-                if (item != _effect)
+        for (int i=0; i<listEffect.Count; i++){
+            if (listEffect[i].GetType() == typeof(EffectStun))
+                if (listEffect[i] != _effect)
                     return;
         }
-        Debug.Log("offstun");
         _target.OffStun();
     }
 }

@@ -18,7 +18,7 @@ public abstract class Effect : MonoBehaviour {
     protected void TimeCountDown(){
         _currentLifeTime += Time.deltaTime;
         if (_currentLifeTime  >= _lifeTime) {
-            TimeOutEffect();
+            OnBeforeDestroy();
             _target.TankEffect.RemoveEffect(_effect);
         }
     }
@@ -26,6 +26,5 @@ public abstract class Effect : MonoBehaviour {
     public virtual void SetCurrentTimeEffect(float lifeTime){
         _currentLifeTime = -lifeTime;
     }
-
-    protected abstract void TimeOutEffect();
+    public abstract void OnBeforeDestroy();
 }

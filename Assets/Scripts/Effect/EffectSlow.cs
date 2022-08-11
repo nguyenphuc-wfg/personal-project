@@ -11,18 +11,18 @@ public class EffectSlow : Effect {
     protected override void ApplyEffect(){
         List<Effect> listEffect = _target.TankEffect.ListEffect;
         float deltaSpeed = _slowValue;
-        foreach (var item in listEffect){
-            if (item.GetType() == typeof(EffectImmune)) {
-                _target.TankEffect.RemoveEffect(_effect);
-                return;
-            }
+        for (int i=0 ; i<listEffect.Count; i++){
+            if (listEffect[i])
+                if (listEffect[i].GetType() == typeof(EffectImmune)) {
+                    _target.TankEffect.RemoveEffect(_effect);
+                    return;
+                }
         }
         _target.TankMovement._deltaSpeed = deltaSpeed;
     }
-    protected override void TimeOutEffect()
-    {
+    public override void OnBeforeDestroy(){
         _slowValue = 0f;
-        ApplyEffect();
+        _target.TankMovement._deltaSpeed = _slowValue;
         source.RemoveEffect(_target, _effect);
     }
 }

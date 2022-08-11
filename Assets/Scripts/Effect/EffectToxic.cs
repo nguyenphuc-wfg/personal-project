@@ -19,13 +19,14 @@ public class EffectToxic : Effect {
         List<Effect> listEffect = _target.TankEffect.ListEffect;
         float damage = _damage;
         float shield = 0;
-        foreach (var item in listEffect){
-            if (item.GetType() == typeof(EffectImmune)) {
+        for (int i=0 ; i<listEffect.Count; i++){
+            if (listEffect[i].GetType() == typeof(EffectImmune)) {
+                 toxicZone.RemoveEffect(_target, _effect);
                 _target.TankEffect.RemoveEffect(_effect);
                 return;
             } 
-            if (item.GetType() == typeof(EffectShield)) {
-                EffectShield effect = (EffectShield) item;
+            if (listEffect[i].GetType() == typeof(EffectShield)) {
+                EffectShield effect = (EffectShield) listEffect[i];
                 shield = Mathf.Max(shield,effect.Percent);
                 damage = _damage * (1 - shield/100);
             }
@@ -33,7 +34,8 @@ public class EffectToxic : Effect {
         }
         _target.TankHealth.TakeDamage(damage);
     }
-    protected override void TimeOutEffect(){
-        toxicZone.RemoveEffect(_target, _effect);
+    public override void OnBeforeDestroy(){
+        if (toxicZone)
+            toxicZone.RemoveEffect(_target, _effect);
     }
 }

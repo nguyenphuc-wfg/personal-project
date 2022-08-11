@@ -6,5 +6,7 @@ public class EffectShield : Effect {
     protected override void ApplyEffect()
     {
     }
-    protected override void TimeOutEffect(){}
+    public override void OnBeforeDestroy()
+    {
+    }
 }

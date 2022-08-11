@@ -16,16 +16,17 @@ public class EffectDamage : Effect {
         float damage = _damage;
         float shield = 0;
 
-        foreach(var item in listEffect){
-            if (item.GetType() == typeof(EffectShield)){
-                EffectShield effect = (EffectShield) item;
+        for (int i=0 ; i<listEffect.Count; i++){
+            if (listEffect[i].GetType() == typeof(EffectShield)){
+                EffectShield effect = (EffectShield) listEffect[i];
                 shield = Mathf.Max(shield, effect.Percent);
                 damage = _damage * (1 - shield/100);
             }
         }
         _target.TankHealth.TakeDamage(damage);
         _target.TankEffect.RemoveEffect(_effect);
-        Destroy(gameObject);
     }
-    protected override void TimeOutEffect(){}
+    public override void OnBeforeDestroy()
+    {
+    }
 }

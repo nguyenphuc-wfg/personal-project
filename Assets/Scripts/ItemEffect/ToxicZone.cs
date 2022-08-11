@@ -45,8 +45,10 @@ public class ToxicZone : MonoBehaviour
     private void OnTriggerExit(Collider target) {
         var tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-        _listEffectToxic[tankComponent].SetCurrentTimeEffect(0);
-        _listEffectSlow[tankComponent].SetCurrentTimeEffect(0);
+        if (_listEffectToxic.ContainsKey(tankComponent))
+            _listEffectToxic[tankComponent]?.SetCurrentTimeEffect(0);
+        if (_listEffectSlow.ContainsKey(tankComponent))
+            _listEffectSlow[tankComponent]?.SetCurrentTimeEffect(0);
     }
     private void TimeOutZone(){
         foreach (var item in _listEffectToxic){
