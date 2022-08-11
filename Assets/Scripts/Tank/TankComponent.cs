@@ -1,12 +1,12 @@
 using UnityEngine;
 
 public class TankComponent : MonoBehaviour {
-    [SerializeField] private Weapon tankShooting;
+    [SerializeField] private TankWeapon tankShooting;
     [SerializeField] private TankMovement tankMovement;
     [SerializeField] private TankHealth tankHealth;
     [SerializeField] private TankEffect tankEffect;
 
-    public Weapon TankShooting {get {return tankShooting;}}
+    public TankWeapon TankShooting {get {return tankShooting;}}
     public TankMovement TankMovement {get {return tankMovement;}}
     public TankHealth TankHealth {get {return tankHealth;}}
     public TankEffect TankEffect {get {return tankEffect;}}

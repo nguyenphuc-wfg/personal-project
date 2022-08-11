@@ -10,4 +10,7 @@ public class TankStats : ScriptableObject
     
     public float M_Speed {get {return m_Speed;}}
     public float M_TurnSpeed {get {return m_TurnSpeed;}}
+    public void Update() {
+        Debug.Log("hi");
+    }
 }

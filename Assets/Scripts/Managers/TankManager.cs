@@ -13,7 +13,7 @@ public class TankManager
 
 
     private TankMovement m_Movement;       
-    private Weapon m_Shooting;
+    private TankWeapon m_Shooting;
     private GameObject m_CanvasGameObject;
 
     private TankGroup m_TankGroup;
