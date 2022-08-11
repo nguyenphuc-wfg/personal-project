@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SOMachineGun", menuName = "Tanks/SOGunWeapon", order = 0)]
+[CreateAssetMenu(fileName = "SOGunWeapon", menuName = "Tanks/SOGunWeapon", order = 0)]
 public class SOGunWeapon : SOWeapon {
     public int _bulletsPerRound = 1;
     [HideInInspector] public Transform _fireTransform;
