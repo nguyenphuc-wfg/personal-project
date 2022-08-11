@@ -46,4 +46,5 @@ public class SOGunWeapon : SOWeapon {
         _currentFireBulletInround = 0;
         _currentInterval = 0;
     }
+    
 }

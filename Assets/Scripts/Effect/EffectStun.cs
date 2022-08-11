@@ -14,7 +14,7 @@ public class EffectStun : Effect {
                 return;
             }
         }
-        _target.OnStun();
+        _target.TankStatus.OnStun();
     }
     public override void OnBeforeDestroy(){
         List<Effect> listEffect = _target.TankEffect.ListEffect;
@@ -23,6 +23,7 @@ public class EffectStun : Effect {
                 if (listEffect[i] != _effect)
                     return;
         }
-        _target.OffStun();
+        _target.TankStatus.OffStun();
     }
+    
 }
