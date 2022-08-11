@@ -52,7 +52,9 @@ public class TankManager
 
         m_CanvasGameObject.SetActive(false);
     }
-
+    public void DisableShooting(){
+        m_Shooting.enabled = false;
+    }
 
     public void EnableControl()
     {

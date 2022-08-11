@@ -44,7 +44,6 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
-        m_TankStats.Update();
         m_MovementAxisName = "Vertical" + m_PlayerNumber;
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
 

@@ -80,7 +80,6 @@ public class GameManager : MonoBehaviour
     }
     
     private async UniTask PlayMatch(){
-
         RoundPlaying();
     }
     public void EndingGame(){
@@ -119,7 +118,7 @@ public class GameManager : MonoBehaviour
     public void RoundPlaying()
     {
         EnableTankControl();
-
+        m_Tanks[0].DisableShooting();
         m_UIStats.message =  string.Empty;
         ChangeUIEvent.Invoke();
     }

@@ -27,5 +27,6 @@ public class TankWeapon : MonoBehaviour {
         _weapon = _weaponStorage.gun01;
         _weapon._fireTransform = _fireTransform;
         _weapon._owner = this.gameObject;
+        _weapon._bulletName = _weaponStorage.bulletName;
     }
 }

@@ -41,7 +41,26 @@ public class ToxicZone : MonoBehaviour
         _listEffectToxic[tankComponent].SetCurrentTimeEffect(_lifeTime);
         _listEffectSlow[tankComponent].SetCurrentTimeEffect(_lifeTime);
     }
-
+    private void OnTriggerStay(Collider target) {
+        var tankComponent = target.gameObject.GetComponent<TankComponent>();
+        if (!tankComponent) return;
+        if (!_listEffectToxic.ContainsKey(tankComponent)){
+            Effect effect = tankComponent.TankEffect.AddEffect(_effectToxic);
+            EffectToxic effectToxic = (EffectToxic) effect;
+            effectToxic.toxicZone = _zone;
+            _listEffectToxic.Add(tankComponent, effectToxic);
+            effect.SetCurrentTimeEffect(_lifeTime); 
+        }  
+        if (!_listEffectSlow.ContainsKey(tankComponent)){
+            Effect effect = tankComponent.TankEffect.AddEffect(_effectSlow);
+            EffectSlow effectSlow = (EffectSlow) effect;
+            effectSlow.source = _zone;
+            _listEffectSlow.Add(tankComponent, effect);
+            effect.SetCurrentTimeEffect(_lifeTime); 
+        }
+        _listEffectToxic[tankComponent].SetCurrentTimeEffect(_lifeTime);
+        _listEffectSlow[tankComponent].SetCurrentTimeEffect(_lifeTime);
+    }
     private void OnTriggerExit(Collider target) {
         var tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;

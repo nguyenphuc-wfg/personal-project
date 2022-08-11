@@ -18,7 +18,6 @@ public class TankEffect : MonoBehaviour {
         Destroy(effect.gameObject);
     }
     public void ClearEffect(){
-        Debug.Log("clearlist");
         for (int i=0; i< listEffect.Count; i++){
             RemoveEffect(listEffect[i]);
         }        
