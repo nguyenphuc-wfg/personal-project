@@ -42,6 +42,7 @@ public class SOGunWeapon : SOWeapon {
         _currentInterval = _interval;
     }
     public override void ResetWeapon(){
+        base.ResetWeapon();
         _currentFireBulletInround = 0;
         _currentInterval = 0;
     }

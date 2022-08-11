@@ -12,16 +12,25 @@ public class EffectSlow : Effect {
         List<Effect> listEffect = _target.TankEffect.ListEffect;
         float deltaSpeed = _slowValue;
         for (int i=0 ; i<listEffect.Count; i++){
-            if (listEffect[i])
-                if (listEffect[i].GetType() == typeof(EffectImmune)) {
-                    _target.TankEffect.RemoveEffect(_effect);
-                    return;
-                }
+            if (listEffect[i].GetType() == typeof(EffectImmune)) {
+                _target.TankEffect.RemoveEffect(_effect);
+                return;
+            }
+            if (listEffect[i].GetType()== typeof(EffectSlow)){
+                deltaSpeed = Mathf.Max(_slowValue, deltaSpeed);
+            }
         }
         _target.TankMovement._deltaSpeed = deltaSpeed;
     }
     public override void OnBeforeDestroy(){
         _slowValue = 0f;
+        List<Effect> listEffect = _target.TankEffect.ListEffect;
+        float deltaSpeed = _slowValue;
+        for (int i=0 ; i<listEffect.Count; i++){
+            if (listEffect[i].GetType()== typeof(EffectSlow)){
+                deltaSpeed = Mathf.Max(_slowValue, deltaSpeed);
+            }
+        }
         _target.TankMovement._deltaSpeed = _slowValue;
         source.RemoveEffect(_target, _effect);
     }

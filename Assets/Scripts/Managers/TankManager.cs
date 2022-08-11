@@ -46,7 +46,7 @@ public class TankManager
     {
         m_Movement.enabled = false;
         m_Shooting.enabled = false;
-        
+
         m_Shooting.ResetWeapon();
         m_Movement.m_Rigidbody.isKinematic = true;
 

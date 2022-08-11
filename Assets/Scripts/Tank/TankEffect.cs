@@ -20,6 +20,7 @@ public class TankEffect : MonoBehaviour {
     public void ClearEffect(){
         for (int i=0; i< listEffect.Count; i++){
             RemoveEffect(listEffect[i]);
+            i--;
         }        
     }
 }

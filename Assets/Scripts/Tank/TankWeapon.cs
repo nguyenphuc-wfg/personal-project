@@ -8,10 +8,8 @@ public class TankWeapon : MonoBehaviour {
     private SOGunWeapon _weapon;
 
     public GameEvent changeWeaponEvent;
-    private void Start() {
-        ChangeWeapon();
-    }
     private void OnEnable() {
+        ChangeWeapon();
         changeWeaponEvent.SubscribeListener(ChangeWeapon);
     }
     private void OnDisable() {
