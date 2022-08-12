@@ -119,6 +119,7 @@ public class GameManager : MonoBehaviour
     {
         EnableTankControl();
         m_Tanks[0].DisableShooting();
+        m_Tanks[1].DisableShooting();
         m_UIStats.message =  string.Empty;
         ChangeUIEvent.Invoke();
     }
@@ -147,11 +148,7 @@ public class GameManager : MonoBehaviour
     public bool IsMatchEnding(){
         return (m_GameWinner != null);
     }
-    // public void TankLeft(){
-    //     if (OneTankLeft()){
-    //         // UIManager.Instance.EndMatchLoop();
-    //     }
-    // }
+
     public bool OneTankLeft()
     {
         int numTanksLeft = 0;

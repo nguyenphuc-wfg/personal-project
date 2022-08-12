@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public abstract class Effect : MonoBehaviour {
     protected TankComponent _target;
@@ -14,7 +15,6 @@ public abstract class Effect : MonoBehaviour {
     }
 
     protected abstract void ApplyEffect();
-    // protected abstract void UpdateEffect();  
     protected void TimeCountDown(){
         _currentLifeTime += Time.deltaTime;
         if (_currentLifeTime  >= _lifeTime) {

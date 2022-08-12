@@ -3,28 +3,28 @@ using UnityEngine;
 public abstract class GunWeapon : Weapon
 {
     [SerializeField] protected int _bulletsPerRound = 1;
-    [SerializeField] protected Transform _fireTransform;
-    [SerializeField] protected GameObject _bullet;
+    [HideInInspector] public Transform _fireTransform;
+    [HideInInspector] protected GameObject _bullet;
     protected int _currentFireBulletInround = 0;
-    [SerializeField] private string _bulletName;
-    protected override void Update()
+    public string _bulletName;
+    public override void OnUpdate()
     {
         if (IsFireInput() && IsAbleToFire())
-            UseWeapon(transform.position + transform.forward);
+            UseWeapon(_owner.transform.position + _owner.transform.forward);
 
         if (_isUsingWeapon)
             UpdateFiring();
         else _currentInterval -= Time.deltaTime;
     }
 
-    protected virtual bool IsFireInput() => Input.GetKeyDown(KeyCode.Space) && _currentInterval <= 0;
+    protected virtual bool IsFireInput() => Input.GetButtonDown($"Fire{_idPlayer}") && _currentInterval <= 0;
 
     protected virtual bool IsAbleToFire() => !_isUsingWeapon;
 
     protected override void UseWeapon(Vector3 position)
     {
         _isUsingWeapon = true;
-        transform.LookAt(position);
+        _owner.transform.LookAt(position);
     }
 
     protected virtual void UpdateFiring()

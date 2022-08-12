@@ -4,4 +4,5 @@ using UnityEngine;
 public class WeaponStorage : ScriptableObject {
     public SOGunWeapon gun01;
     public string bulletName;
+    public GunWeapon gun02;
 }
