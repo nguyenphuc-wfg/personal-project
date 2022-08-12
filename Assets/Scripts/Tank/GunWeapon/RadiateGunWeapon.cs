@@ -1,8 +1,7 @@
 using UnityEngine;
 
 public class RadiateGunWeapon: GunWeapon {
-    [SerializeField] private float _radiateAngle;
-    //[SerializeField] private Transform fireTransform;
+    private float _radiateAngle;
     protected override void UpdateFiring()
     {
         int startIndex = _bulletsPerRound % 2 == 0 ? 2 : 1;
@@ -22,7 +21,12 @@ public class RadiateGunWeapon: GunWeapon {
             }
             var rotation =  Quaternion.Euler(euler);
             FireOneBullet(pos, rotation);
-            Debug.DrawLine(pos, pos + rotation * Vector3.forward * 10, Color.red, 1);
         }
+    }
+    public override void SetUpData(DataWeapon data){
+        base.SetUpData(data);
+        if (!(data is DataRadiateGun dataRadiateGun)) 
+            return;
+        _radiateAngle = dataRadiateGun._radiateAngle;
     }
 }

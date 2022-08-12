@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MachineGunWeapon: GunWeapon{
     private float _currentFiredInterval = 0;
-    [SerializeField] private float _fireBulletInterval = 1;
+    private float _fireBulletInterval = 1;
     protected override void UpdateFiring()
     {
         _currentFiredInterval -= Time.deltaTime;
@@ -21,5 +21,11 @@ public class MachineGunWeapon: GunWeapon{
     {
         base.ResetWeapon();
         _currentFiredInterval = 0f;
+    }
+    public override void SetUpData(DataWeapon data){
+        base.SetUpData(data);
+        if (!(data is DataMachineGun dataMachineGun)) 
+            return;
+        _fireBulletInterval = dataMachineGun._fireBulletInterval;
     }
 }

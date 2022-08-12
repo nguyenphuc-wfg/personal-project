@@ -25,8 +25,8 @@ public class UIManager : MonoBehaviour
         changeWeaponStorage.UnSubscribeListener(ChangeWeaponStorageUI);
     }
     public void ChangeWeaponStorageUI(){
-        _txtWeaponStorage2.text = $"<color=#f54242>{_weaponStorage2.gun02.GetType()}</color>  <color=#fcfcfc>{_weaponStorage2.bulletName}</color>";
-        _txtWeaponStorage.text = $"<color=#00fff2>{_weaponStorage.gun02.GetType()}</color>  <color=#fcfcfc>{_weaponStorage.bulletName}</color>";
+        _txtWeaponStorage2.text = $"<color=#f54242>{_weaponStorage2.gun.GetType()}</color>  <color=#fcfcfc>{_weaponStorage2.bulletName}</color>";
+        _txtWeaponStorage.text = $"<color=#00fff2>{_weaponStorage.gun.GetType()}</color>  <color=#fcfcfc>{_weaponStorage.bulletName}</color>";
     }
     public void ChangeMessage(){
         m_MessageText.text = m_UIStats.message;

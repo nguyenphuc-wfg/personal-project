@@ -24,9 +24,9 @@ public class TankWeapon : MonoBehaviour {
         // _weapon.ResetWeapon();
     }
     public void ChangeWeapon(){
-        _weapon = _weaponStorage.gun01;
-        _weapon._fireTransform = _fireTransform;
-        _weapon._owner = this.gameObject;
-        _weapon._bulletName = _weaponStorage.bulletName;
+        // _weapon = _weaponStorage.gun;
+        // _weapon._fireTransform = _fireTransform;
+        // _weapon._owner = this.gameObject;
+        // _weapon._bulletName = _weaponStorage.bulletName;
     }
 }

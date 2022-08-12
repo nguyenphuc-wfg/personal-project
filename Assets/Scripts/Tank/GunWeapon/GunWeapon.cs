@@ -2,11 +2,11 @@ using UnityEngine;
 
 public abstract class GunWeapon : Weapon
 {
-    [SerializeField] protected int _bulletsPerRound = 1;
+    protected int _bulletsPerRound = 1;
     [HideInInspector] public Transform _fireTransform;
     [HideInInspector] protected GameObject _bullet;
     protected int _currentFireBulletInround = 0;
-    public string _bulletName;
+    [HideInInspector] public string _bulletName;
     public override void OnUpdate()
     {
         if (IsFireInput() && IsAbleToFire())
@@ -58,6 +58,12 @@ public abstract class GunWeapon : Weapon
         base.ResetWeapon();
         _currentFireBulletInround = 0;
         _currentInterval = 0;
+    }
+    public override void SetUpData(DataWeapon data){
+        base.SetUpData(data);
+        if (!(data is DataGunWeapon dataGunWeapon)) 
+            return;
+        _bulletsPerRound = dataGunWeapon._bulletsPerRound;
     }
 
 }

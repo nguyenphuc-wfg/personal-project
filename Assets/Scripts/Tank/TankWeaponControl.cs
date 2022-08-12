@@ -26,7 +26,8 @@ public class TankWeaponControl : MonoBehaviour
         _weapon.ResetWeapon();
     }
     public void ChangeWeapon(){
-        _weapon = _weaponManager._weaponStorage[m_PlayerNumber-1].gun02;
+        _weapon = _weaponManager._weaponStorage[m_PlayerNumber-1].gun;
+        _weapon.SetUpData(_weaponManager._weaponStorage[m_PlayerNumber-1].dataGun);
         _weapon._fireTransform = _fireTransform;
         _weapon._owner = this.gameObject;
         _weapon._bulletName = _weaponManager._weaponStorage[m_PlayerNumber-1].bulletName;

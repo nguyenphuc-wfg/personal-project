@@ -14,7 +14,7 @@ public class TankStatus : MonoBehaviour {
         _tankComponent.TankWeaponControl.enabled = false;
         _tankComponent.TankMovement.enabled = false;
         _tankComponent.WeaponManager.enabled = false;
-        _tankComponent.TankWeapon.ResetWeapon();
+        _tankComponent.TankWeaponControl.ResetWeapon();
     }
     public void OffStun(){
         isStun = false;
