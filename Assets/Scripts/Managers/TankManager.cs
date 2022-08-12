@@ -13,24 +13,22 @@ public class TankManager
 
 
     private TankMovement m_Movement;       
-    private TankWeapon m_Shooting;
+    private TankWeaponControl m_Shooting;
     private GameObject m_CanvasGameObject;
 
-    private TankGroup m_TankGroup;
     private TankComponent m_TankComponent;
 
     public void Setup()
     {
-        m_TankGroup = m_Instance.GetComponent<TankGroup>();
         m_TankComponent = m_Instance.GetComponent<TankComponent>();
 
-        m_Movement = m_TankGroup.m_Movement;    
-        m_Shooting = m_TankGroup.m_Shooting;
-        m_CanvasGameObject = m_TankGroup.m_CanvasGameObject;
+        m_Movement = m_TankComponent.TankMovement;    
+        m_Shooting = m_TankComponent.TankWeaponControl;
+        m_CanvasGameObject = m_TankComponent.m_CanvasGameObject;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
-        m_TankComponent.TankWeapon2.m_PlayerNumber = m_PlayerNumber;
+        m_TankComponent.TankWeaponControl.m_PlayerNumber = m_PlayerNumber;
 
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
@@ -46,7 +44,7 @@ public class TankManager
     public void DisableControl()
     {
         m_Movement.enabled = false;
-        m_TankComponent.TankWeapon2.enabled = false;
+        m_Shooting.enabled = false;
 
         m_Shooting.ResetWeapon();
         m_Movement.m_Rigidbody.isKinematic = true;
@@ -60,7 +58,7 @@ public class TankManager
     public void EnableControl()
     {
         m_Movement.enabled = true;
-        m_TankComponent.TankWeapon2.enabled = true;
+        m_Shooting.enabled = true;
 
         m_CanvasGameObject.SetActive(true);
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankWeapon2 : MonoBehaviour
+public class TankWeaponControl : MonoBehaviour
 {
     [SerializeField] private Transform _fireTransform;
     [SerializeField] private WeaponStorage _weaponStorage;

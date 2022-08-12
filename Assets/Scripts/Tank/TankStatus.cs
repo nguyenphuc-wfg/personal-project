@@ -11,17 +11,20 @@ public class TankStatus : MonoBehaviour {
     
     public void OnStun(){
         isStun = true;
-        _tankComponent.TankWeapon2.enabled = false;
+        _tankComponent.TankWeaponControl.enabled = false;
         _tankComponent.TankMovement.enabled = false;
+        _tankComponent.WeaponManager.enabled = false;
         _tankComponent.TankWeapon.ResetWeapon();
     }
     public void OffStun(){
         isStun = false;
-        _tankComponent.TankWeapon2.enabled = true;
+        _tankComponent.TankWeaponControl.enabled = true;
         _tankComponent.TankMovement.enabled = true;
+        _tankComponent.WeaponManager.enabled = true;
     }
     public void OffStunOnRoot(){
         isStun = false;
-        _tankComponent.TankWeapon2.enabled = true;
+        _tankComponent.TankWeaponControl.enabled = true;
+        _tankComponent.WeaponManager.enabled = true;
     }
 }

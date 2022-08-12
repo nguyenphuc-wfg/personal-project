@@ -9,7 +9,7 @@ public class WeaponManager : MonoBehaviour {
     [SerializeField] private List<SOGunWeapon> _listWeapon = new List<SOGunWeapon>();
     [SerializeField] private List<string> _bulletName = new List<string>();
     [SerializeField] private List<GunWeapon> _listWeapon1 = new List<GunWeapon>();
-    [SerializeField] private TankWeapon2 _tankWeapon2;
+    [SerializeField] private TankWeaponControl _tankWeapon;
 
     private int _iBullet = 0;
     private int _iWeapon = 0;
@@ -19,24 +19,23 @@ public class WeaponManager : MonoBehaviour {
     }
     private void Update() {
         // Change Weapon
-        if (Input.GetButtonDown($"ChangeWp{_tankWeapon2.m_PlayerNumber}")){
+        if (Input.GetButtonDown($"ChangeWp{_tankWeapon.m_PlayerNumber}")){
             ChangeWeapon();
         }
 
         // Change Bullet
-        if (Input.GetButtonDown($"ChangeBullet{_tankWeapon2.m_PlayerNumber}")){
+        if (Input.GetButtonDown($"ChangeBullet{_tankWeapon.m_PlayerNumber}")){
             ChangeBullet();
         }
     }    
     private void ChangeWeapon(){
         _iWeapon = ++_iWeapon >= _listWeapon.Count ? 0 : _iWeapon++;
-        // _weaponStorage[_tankWeapon2.m_PlayerNumber-1].gun01 = _listWeapon[_iWeapon];
-        _weaponStorage[_tankWeapon2.m_PlayerNumber-1].gun02 = _listWeapon1[_iWeapon];
+        _weaponStorage[_tankWeapon.m_PlayerNumber-1].gun02 = _listWeapon1[_iWeapon];
         changeWeaponEvent.Invoke();
     }
     private void ChangeBullet(){
-        _iBullet = ++_iBullet >= _listWeapon.Count ? 0 : _iBullet++;
-        _weaponStorage[_tankWeapon2.m_PlayerNumber-1].bulletName = _bulletName[_iBullet];
+        _iBullet = ++_iBullet >= _bulletName.Count ? 0 : _iBullet++;
+        _weaponStorage[_tankWeapon.m_PlayerNumber-1].bulletName = _bulletName[_iBullet];
         changeWeaponEvent.Invoke();
     }
 }

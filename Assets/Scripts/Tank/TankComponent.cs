@@ -6,12 +6,15 @@ public class TankComponent : MonoBehaviour {
     [SerializeField] private TankEffect tankEffect;
     [SerializeField] private TankWeapon tankWeapon;
     [SerializeField] private TankStatus tankStatus;
-    [SerializeField] private TankWeapon2 tankWeapon2;
+    [SerializeField] private TankWeaponControl tankWeaponControl;
+    [SerializeField] private WeaponManager weaponManager;
+
+    public GameObject m_CanvasGameObject;
     public TankMovement TankMovement {get {return tankMovement;}}
     public TankHealth TankHealth {get {return tankHealth;}}
     public TankEffect TankEffect {get {return tankEffect;}}
     public TankWeapon TankWeapon {get {return tankWeapon;}}
     public TankStatus TankStatus {get {return tankStatus;}}
-    public TankWeapon2 TankWeapon2 {get {return tankWeapon2;}}
-
+    public TankWeaponControl TankWeaponControl {get {return tankWeaponControl;}}
+    public WeaponManager WeaponManager {get {return weaponManager;}}
 }

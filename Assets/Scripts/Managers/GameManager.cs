@@ -118,8 +118,6 @@ public class GameManager : MonoBehaviour
     public void RoundPlaying()
     {
         EnableTankControl();
-        m_Tanks[0].DisableShooting();
-        m_Tanks[1].DisableShooting();
         m_UIStats.message =  string.Empty;
         ChangeUIEvent.Invoke();
     }
