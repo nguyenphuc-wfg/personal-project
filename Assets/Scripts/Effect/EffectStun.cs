@@ -9,7 +9,7 @@ public class EffectStun : Effect {
     protected override void ApplyEffect(){
         List<Effect> listEffect = _target.TankEffect.ListEffect;
         for (int i=0 ; i<listEffect.Count; i++){
-            if (listEffect[i].GetType() == typeof(EffectImmune)) {
+            if (listEffect[i] is EffectImmune) {
                 _target.TankEffect.RemoveEffect(_effect);
                 return;
             }
@@ -23,11 +23,6 @@ public class EffectStun : Effect {
         _target.TankStatus.OnStun();
     }
     public override void OnBeforeDestroy(){
-        List<Effect> listEffect = _target.TankEffect.ListEffect;
-        for (int i=0; i<listEffect.Count; i++){
-            if (listEffect[i] is EffectStun && listEffect[i] != _effect)
-                return;
-        }
         _target.TankStatus.OffStun();
     }
     

@@ -20,9 +20,7 @@ public class TankStatus : MonoBehaviour {
     public void OffStun(){
         isStun = false;
         // _tankComponent.TankMovement.enabled = true;
-
-        if (isRoot) return;
-
+        if (isSleep) return;
         _tankComponent.TankWeaponControl.enabled = true;
         _tankComponent.WeaponManager.enabled = true;
     }
@@ -32,7 +30,6 @@ public class TankStatus : MonoBehaviour {
     }
     public void OffRoot(){
         isRoot = false;
-        if (isStun) return;
         // _tankComponent.TankMovement.enabled = true;
     }
     public void OnSleep(){
@@ -46,8 +43,6 @@ public class TankStatus : MonoBehaviour {
         isSleep = false;
         if (isStun) return;
         // _tankComponent.TankMovement.enabled = true;
-
-        if (isRoot) return;
         _tankComponent.TankWeaponControl.enabled = true;
         _tankComponent.WeaponManager.enabled = true;
     }

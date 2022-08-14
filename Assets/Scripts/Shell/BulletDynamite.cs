@@ -16,9 +16,10 @@ public class BulletDynamite : Bullet {
     }   
 
     private void OnCollisionEnter(Collision target) {
+
         TankComponent tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-
+        GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
         tankComponent.TankEffect.AddEffect(_effectStun);
         gameObject.SetActive(false);
     }

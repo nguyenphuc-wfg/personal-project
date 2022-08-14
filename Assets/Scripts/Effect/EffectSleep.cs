@@ -26,13 +26,6 @@ public class EffectSleep : Effect
     }
     public override void OnBeforeDestroy()
     {
-        if (_target.TankStatus.isStun) return;
-        List<Effect> listEffect = _target.TankEffect.ListEffect;
-        for (int i=0; i<listEffect.Count; i++){
-            if (listEffect[i] is EffectSleep | listEffect[i] is EffectStun)
-                if (listEffect[i] != _effect)
-                    return;
-        }
         _target.TankStatus.OffSleep();
     }
 }
