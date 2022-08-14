@@ -10,6 +10,8 @@ public class BulletFindWay : Bullet {
     [SerializeField] private float _radarRadius;
     [SerializeField] private NavMeshAgent _navMeshAgent;
     public LayerMask _radarMask;
+    [SerializeField] private Effect _effectRoot;
+    [SerializeField] private Effect _effectDamage;
     private void Start() {
         _navMeshAgent.speed = _speed;
     }
@@ -28,13 +30,16 @@ public class BulletFindWay : Bullet {
     }
 
     private void OnCollisionEnter(Collision target){
-        TankHealth targetHealth = target.gameObject.GetComponent<TankHealth>();
 
-        if (targetHealth) {
-            targetHealth.TakeDamage(_damage);
-            GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
-            gameObject.SetActive(false);
-        }
+        TankComponent tankComponent = target.gameObject.GetComponent<TankComponent>();
+
+        if (!tankComponent) return;
+
+        EffectDamage effect = (EffectDamage) tankComponent.TankEffect.AddEffect(_effectDamage);
+        effect.SetDamage(_damage);
+        tankComponent.TankEffect.AddEffect(_effectRoot);
+        // GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
+        gameObject.SetActive(false);
     }
     private void Radaring(){
         if (target != null) return;

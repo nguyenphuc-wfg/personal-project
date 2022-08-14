@@ -23,4 +23,9 @@ public class TankEffect : MonoBehaviour {
             i--;
         }        
     }
+    private void Update() {
+        for (int i = 0; i < listEffect.Count; i++) {
+            listEffect[i].OnUpdate();
+        }   
+    }
 }

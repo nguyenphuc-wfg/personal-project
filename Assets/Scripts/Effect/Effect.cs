@@ -5,17 +5,17 @@ public abstract class Effect : MonoBehaviour {
     protected TankComponent _target;
     [SerializeField] protected Effect _effect;
     [SerializeField] protected float _lifeTime;
-    protected float _currentLifeTime;
+    [HideInInspector] public float _currentLifeTime;
     public virtual void SetUp(TankComponent target){
         _target = target;
     }
-    protected virtual void Update() {
-        if (_lifeTime != 0)     
-            TimeCountDown();
+    public void OnUpdate() {
+        if (_lifeTime == 0) return;
+        TimeCountDown();
     }
 
     protected abstract void ApplyEffect();
-    protected void TimeCountDown(){
+    protected void TimeCountDown(){ 
         _currentLifeTime += Time.deltaTime;
         if (_currentLifeTime  >= _lifeTime) {
             OnBeforeDestroy();

@@ -20,7 +20,7 @@ public class TankMovement : MonoBehaviour
     private float m_OriginalPitch;         
 
     public float _deltaSpeed = 0;
-
+    [SerializeField] private TankStatus _tankStatus;
     private void Awake()
     {
         m_Speed = m_TankStats.M_Speed;
@@ -83,8 +83,10 @@ public class TankMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Move and turn the tank.
-        Move();
+        if (_tankStatus.isSleep || _tankStatus.isStun) return; 
         Turn(); 
+        if (_tankStatus.isRoot) return; 
+        Move();
     }
 
 

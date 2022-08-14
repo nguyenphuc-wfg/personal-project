@@ -17,10 +17,13 @@ public class EffectDamage : Effect {
         float shield = 0;
 
         for (int i=0 ; i<listEffect.Count; i++){
-            if (listEffect[i].GetType() == typeof(EffectShield)){
+            if (listEffect[i] is EffectShield){
                 EffectShield effect = (EffectShield) listEffect[i];
                 shield = Mathf.Max(shield, effect.Percent);
                 damage = _damage * (1 - shield/100);
+            }
+            if (listEffect[i] is EffectSleep){
+                _target.TankEffect.RemoveEffect(listEffect[i]);
             }
         }
         _target.TankHealth.TakeDamage(damage);

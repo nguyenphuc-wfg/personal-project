@@ -8,22 +8,46 @@ public class TankStatus : MonoBehaviour {
     public bool isRoot;
     public bool isStun;
     public bool isTimeStop;
+    public bool isSleep;
     
     public void OnStun(){
         isStun = true;
         _tankComponent.TankWeaponControl.enabled = false;
-        _tankComponent.TankMovement.enabled = false;
+        // _tankComponent.TankMovement.enabled = false;
         _tankComponent.WeaponManager.enabled = false;
         _tankComponent.TankWeaponControl.ResetWeapon();
     }
     public void OffStun(){
         isStun = false;
+        // _tankComponent.TankMovement.enabled = true;
+
+        if (isRoot) return;
+
         _tankComponent.TankWeaponControl.enabled = true;
-        _tankComponent.TankMovement.enabled = true;
         _tankComponent.WeaponManager.enabled = true;
     }
-    public void OffStunOnRoot(){
-        isStun = false;
+    public void OnRoot(){
+        isRoot = true;
+        // _tankComponent.TankMovement.enabled = false;
+    }
+    public void OffRoot(){
+        isRoot = false;
+        if (isStun) return;
+        // _tankComponent.TankMovement.enabled = true;
+    }
+    public void OnSleep(){
+        isSleep = true;
+        _tankComponent.TankWeaponControl.enabled = false;
+        // _tankComponent.TankMovement.enabled = false;
+        _tankComponent.WeaponManager.enabled = false;
+        _tankComponent.TankWeaponControl.ResetWeapon();
+    }
+    public void OffSleep(){
+        isSleep = false;
+        if (isStun) return;
+        // _tankComponent.TankMovement.enabled = true;
+
+        if (isRoot) return;
         _tankComponent.TankWeaponControl.enabled = true;
         _tankComponent.WeaponManager.enabled = true;
     }
