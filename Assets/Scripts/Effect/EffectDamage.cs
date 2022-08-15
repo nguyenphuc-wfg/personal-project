@@ -19,7 +19,7 @@ public class EffectDamage : EffectLogic
             if (listEffect[i].EffectLogic is EffectSleep)
                 tankComps.TankEffect.RemoveEffect(listEffect[i]);
         }
-        damage = effectData.Value * (1 - shield / 100);
+        damage = effectData.Value * (1 - Mathf.Min(shield, 100) / 100);
         tankComps.TankHealth.TakeDamage(damage);
         tankComps.TankEffect.RemoveEffect(effectData);
     }

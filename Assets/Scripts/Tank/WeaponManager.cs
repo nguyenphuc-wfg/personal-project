@@ -13,14 +13,15 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private TankWeaponControl _tankWeapon;
     [SerializeField] private TankStatus _tankStatus;
     [SerializeField] private TankEvent _tankEvent;
-    private int _iBullet = -1;
-    private int _iWeapon = -1;
+    private int _iBullet = 0;
+    private int _iWeapon = 0;
     public EffectType _effectType;
     private bool isDisable;
     private void Start()
     {
-        ChangeWeapon();
-        ChangeBullet();
+        _weaponStorage[_tankWeapon.m_PlayerNumber - 1].gun = _listWeapon[0];
+        _weaponStorage[_tankWeapon.m_PlayerNumber - 1].dataGun = _dataGunWeapon[0];
+        changeWeaponEvent?.Invoke();
     }
     private void OnEnable()
     {
@@ -51,13 +52,13 @@ public class WeaponManager : MonoBehaviour
         _iWeapon = ++_iWeapon >= _listWeapon.Count ? 0 : _iWeapon++;
         _weaponStorage[_tankWeapon.m_PlayerNumber - 1].gun = _listWeapon[_iWeapon];
         _weaponStorage[_tankWeapon.m_PlayerNumber - 1].dataGun = _dataGunWeapon[_iWeapon];
-        changeWeaponEvent.Invoke();
+        changeWeaponEvent?.Invoke();
     }
     private void ChangeBullet()
     {
         _iBullet = ++_iBullet >= _bulletName.Count ? 0 : _iBullet++;
         _weaponStorage[_tankWeapon.m_PlayerNumber - 1].bulletName = _bulletName[_iBullet];
-        changeWeaponEvent.Invoke();
+        changeWeaponEvent?.Invoke();
     }
     public void TankStatusEvent()
     {

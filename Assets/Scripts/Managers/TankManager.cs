@@ -4,15 +4,15 @@ using UnityEngine;
 [Serializable]
 public class TankManager
 {
-    public Color m_PlayerColor;            
-    public Transform m_SpawnPoint;         
-    [HideInInspector] public int m_PlayerNumber;             
+    public Color m_PlayerColor;
+    public Transform m_SpawnPoint;
+    [HideInInspector] public int m_PlayerNumber;
     [HideInInspector] public string m_ColoredPlayerText;
-    [HideInInspector] public GameObject m_Instance;          
-    [HideInInspector] public int m_Wins;                     
+    [HideInInspector] public GameObject m_Instance;
+    [HideInInspector] public int m_Wins;
 
 
-    private TankMovement m_Movement;       
+    private TankMovement m_Movement;
     private TankWeaponControl m_Shooting;
     private GameObject m_CanvasGameObject;
 
@@ -22,13 +22,12 @@ public class TankManager
     {
         m_TankComponent = m_Instance.GetComponent<TankComponent>();
 
-        m_Movement = m_TankComponent.TankMovement;    
+        m_Movement = m_TankComponent.TankMovement;
         m_Shooting = m_TankComponent.TankWeaponControl;
         m_CanvasGameObject = m_TankComponent.m_CanvasGameObject;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;
         m_Shooting.m_PlayerNumber = m_PlayerNumber;
-        m_TankComponent.TankWeaponControl.m_PlayerNumber = m_PlayerNumber;
 
         m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
@@ -51,7 +50,8 @@ public class TankManager
 
         m_CanvasGameObject.SetActive(false);
     }
-    public void DisableShooting(){
+    public void DisableShooting()
+    {
         m_Shooting.enabled = false;
     }
 
@@ -63,7 +63,8 @@ public class TankManager
         m_CanvasGameObject.SetActive(true);
     }
 
-    public void ClearTankEffect(){
+    public void ClearTankEffect()
+    {
         m_TankComponent.TankEffect.ClearEffect();
     }
     public void Reset()

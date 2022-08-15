@@ -77,15 +77,4 @@ public class ToxicZone : MonoBehaviour
             item.Value.ResetCurrentLifeTime();
         }
     }
-    // public void RemoveEffect(TankComponent target, Effect effect)
-    // {
-    //     if (effect.GetType() == typeof(EffectSlow))
-    //     {
-    //         _listEffectSlow.Remove(target);
-    //     }
-    //     if (effect.GetType() == typeof(EffectToxic))
-    //     {
-    //         _listEffectToxic.Remove(target);
-    //     }
-    // }
 }

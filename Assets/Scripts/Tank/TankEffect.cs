@@ -109,6 +109,8 @@ public class TankEffect : MonoBehaviour
     private void Update()
     {
         for (int i = 0; i < listEffect.Count; i++)
+        {
             listEffect[i].OnUpdate(_tankComponent);
+        }
     }
 }

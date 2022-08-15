@@ -25,7 +25,7 @@ public class EffectSlow : EffectLogic
             if (listEffect[i].EffectLogic is EffectSlow)
                 deltaSpeed = Mathf.Max(listEffect[i].Value, deltaSpeed);
         }
-        tankComps.TankMovement._deltaSpeed = deltaSpeed;
+        tankComps.TankMovement._deltaSpeed = Mathf.Min(deltaSpeed, 100);
     }
     public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
     {

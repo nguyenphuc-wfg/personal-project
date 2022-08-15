@@ -17,9 +17,11 @@ public class TankWeaponControl : MonoBehaviour
     {
         _tankEvent.SubscribeListener(TankStatusEvent);
         changeWeaponEvent.SubscribeListener(ChangeWeapon);
+    }
+    private void Start()
+    {
         ChangeWeapon();
     }
-
     private void OnDisable()
     {
         _tankEvent.UnSubscribeListener(TankStatusEvent);
@@ -32,7 +34,8 @@ public class TankWeaponControl : MonoBehaviour
     }
     public void ResetWeapon()
     {
-        _weapon.ResetWeapon();
+        if (_weapon)
+            _weapon.ResetWeapon();
     }
     public void ChangeWeapon()
     {

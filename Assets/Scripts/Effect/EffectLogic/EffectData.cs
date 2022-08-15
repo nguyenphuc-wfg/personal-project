@@ -67,7 +67,6 @@ public class EffectData
     }
 }
 
-[Flags]
 public enum EffectType
 {
     NONE = 0,

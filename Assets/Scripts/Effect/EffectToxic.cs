@@ -5,7 +5,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "EffectToxic", menuName = "Tanks/EffectLogic/EffectToxic", order = 0)]
 public class EffectToxic : EffectLogic
 {
-    // [SerializeField] private EffectData _effect;
     public override void OnStart(TankComponent tankComps, EffectData effectData)
     {
         List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
@@ -13,7 +12,6 @@ public class EffectToxic : EffectLogic
         {
             if (listEffect[i].EffectLogic is EffectImmune)
             {
-                // toxicZone.RemoveEffect(_target, _effect);
                 tankComps.TankEffect.RemoveEffect(effectData);
                 return;
             }
