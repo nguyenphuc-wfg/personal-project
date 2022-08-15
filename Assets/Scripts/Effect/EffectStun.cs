@@ -14,7 +14,7 @@ public class EffectStun : Effect {
                 return;
             }
             if (listEffect[i] is EffectStun && listEffect[i] != _effect){
-                if (listEffect[i]._currentLifeTime > _lifeTime)
+                if (listEffect[i].TimeRemaining > _lifeTime)
                     _target.TankEffect.RemoveEffect(_effect);
                 else 
                     _target.TankEffect.RemoveEffect(listEffect[i]);

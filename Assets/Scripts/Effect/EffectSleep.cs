@@ -16,7 +16,7 @@ public class EffectSleep : Effect
                 return;
             }
             if (listEffect[i] is EffectSleep && listEffect[i] != _effect){
-                if (listEffect[i]._currentLifeTime > _lifeTime)
+                if (listEffect[i].TimeRemaining > _lifeTime)
                     _target.TankEffect.RemoveEffect(_effect);
                 else 
                     _target.TankEffect.RemoveEffect(listEffect[i]);

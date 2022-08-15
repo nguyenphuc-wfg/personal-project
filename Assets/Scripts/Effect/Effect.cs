@@ -6,6 +6,7 @@ public abstract class Effect : MonoBehaviour {
     [SerializeField] protected Effect _effect;
     [SerializeField] protected float _lifeTime;
     [HideInInspector] public float _currentLifeTime;
+    [HideInInspector] public float TimeRemaining {get {return _lifeTime - _currentLifeTime;}}
     public virtual void SetUp(TankComponent target){
         _target = target;
     }
@@ -27,4 +28,5 @@ public abstract class Effect : MonoBehaviour {
         _currentLifeTime = -lifeTime;
     }
     public abstract void OnBeforeDestroy();
+        
 }
