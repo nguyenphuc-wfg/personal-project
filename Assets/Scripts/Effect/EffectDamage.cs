@@ -23,7 +23,7 @@ public class EffectDamage : EffectLogic
         tankComps.TankHealth.TakeDamage(damage);
         tankComps.TankEffect.RemoveEffect(effectData);
     }
-    public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
+    public override void OnRemoveEffect(TankComponent tankComps, EffectData effectData)
     {
     }
 }

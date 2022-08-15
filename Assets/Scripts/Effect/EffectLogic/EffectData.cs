@@ -53,9 +53,9 @@ public class EffectData
     {
         _currentLifeTime = _lifeTime;
     }
-    public void OnBeforeDestroy(TankComponent tankComps)
+    public void OnRemoveEffect(TankComponent tankComps)
     {
-        _effectLogic.OnBeforeDestroy(tankComps, this);
+        _effectLogic.OnRemoveEffect(tankComps, this);
     }
     public void SetCurrentInterval(float interval)
     {

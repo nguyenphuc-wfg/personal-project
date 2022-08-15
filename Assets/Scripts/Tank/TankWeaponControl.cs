@@ -46,9 +46,9 @@ public class TankWeaponControl : MonoBehaviour
         _weapon._bulletName = _weaponManager._weaponStorage[m_PlayerNumber - 1].bulletName;
         _weapon._idPlayer = m_PlayerNumber;
     }
-    public void TankStatusEvent()
+    public void TankStatusEvent(TankStatusFlag flag)
     {
-        isDisable = _tankStatus.isSleep || _tankStatus.isStun;
+        isDisable = flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
         if (isDisable) ResetWeapon();
     }
 }

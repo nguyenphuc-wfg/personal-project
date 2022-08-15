@@ -7,21 +7,11 @@ public class EffectStun : EffectLogic
 {
     protected override void ApplyEffect(TankComponent tankComps, EffectData effectData)
     {
-        List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
-
-        for (int i = 0; i < listEffect.Count; i++)
-        {
-            if (listEffect[i].EffectLogic is EffectImmune)
-            {
-                tankComps.TankEffect.RemoveEffect(effectData);
-                return;
-            }
-        }
-        tankComps.TankStatus.OnStun();
+        tankComps.TankStatus.SetStatus(TankStatusFlag.STUN);
     }
-    public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
+    public override void OnRemoveEffect(TankComponent tankComps, EffectData effectData)
     {
-        tankComps.TankStatus.OffStun();
+        tankComps.TankStatus.ClearStatus(TankStatusFlag.STUN);
     }
 
 }

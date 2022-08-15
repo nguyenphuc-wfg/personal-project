@@ -60,8 +60,8 @@ public class WeaponManager : MonoBehaviour
         _weaponStorage[_tankWeapon.m_PlayerNumber - 1].bulletName = _bulletName[_iBullet];
         changeWeaponEvent?.Invoke();
     }
-    public void TankStatusEvent()
+    public void TankStatusEvent(TankStatusFlag flag)
     {
-        isDisable = _tankStatus.isSleep || _tankStatus.isStun;
+        isDisable = flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
     }
 }

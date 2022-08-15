@@ -7,15 +7,6 @@ public class EffectToxic : EffectLogic
 {
     public override void OnStart(TankComponent tankComps, EffectData effectData)
     {
-        List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
-        for (int i = 0; i < listEffect.Count; i++)
-        {
-            if (listEffect[i].EffectLogic is EffectImmune)
-            {
-                tankComps.TankEffect.RemoveEffect(effectData);
-                return;
-            }
-        }
     }
     public override void OnUpdate(TankComponent tankComps, EffectData effectData)
     {
@@ -44,7 +35,7 @@ public class EffectToxic : EffectLogic
         damage = effectData.Value * (1 - shield / 100);
         tankComps.TankHealth.TakeDamage(damage);
     }
-    public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
+    public override void OnRemoveEffect(TankComponent tankComps, EffectData effectData)
     {
     }
 }

@@ -19,7 +19,7 @@ public class TankMovement : MonoBehaviour
     private float m_TurnInputValue;
     private float m_OriginalPitch;
 
-    public float _deltaSpeed = 0;
+    public float _percentSpeed = 0;
     private bool isDisableMove;
     private bool isDisableRotate;
     [SerializeField] private TankStatus _tankStatus;
@@ -103,7 +103,7 @@ public class TankMovement : MonoBehaviour
     private void Move()
     {
         // Adjust the position of the tank based on the player's input.
-        Vector3 movement = transform.forward * m_MovementInputValue * (m_Speed * (1 - _deltaSpeed / 100)) * Time.deltaTime;
+        Vector3 movement = transform.forward * m_MovementInputValue * (m_Speed * (1 - _percentSpeed / 100)) * Time.deltaTime;
         m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
     }
 
@@ -117,9 +117,10 @@ public class TankMovement : MonoBehaviour
 
         m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
     }
-    public void TankStatusEvent()
+    public void TankStatusEvent(TankStatusFlag flag)
     {
-        isDisableMove = _tankStatus.isRoot || _tankStatus.isStun || _tankStatus.isSleep;
-        isDisableRotate = _tankStatus.isStun || _tankStatus.isSleep;
+
+        isDisableMove = flag.HasFlag(TankStatusFlag.ROOT) || flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
+        isDisableRotate = flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
     }
 }

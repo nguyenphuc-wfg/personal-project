@@ -11,19 +11,10 @@ public class EffectRoot : EffectLogic
     }
     protected override void ApplyEffect(TankComponent tankComps, EffectData effectData)
     {
-        List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
-        for (int i = 0; i < listEffect.Count; i++)
-        {
-            if ((listEffect[i].EffectLogic is EffectImmune))
-            {
-                tankComps.TankEffect.RemoveEffect(effectData);
-                return;
-            }
-        }
-        tankComps.TankStatus.OnRoot();
+        tankComps.TankStatus.SetStatus(TankStatusFlag.ROOT);
     }
-    public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
+    public override void OnRemoveEffect(TankComponent tankComps, EffectData effectData)
     {
-        tankComps.TankStatus.OffRoot();
+        tankComps.TankStatus.ClearStatus(TankStatusFlag.ROOT);
     }
 }

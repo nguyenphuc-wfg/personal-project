@@ -2,18 +2,18 @@ using UnityEngine;
 using System;
 public class TankEvent : MonoBehaviour
 {
-    private Action eventListeners = null;
+    private Action<TankStatusFlag> eventListeners = null;
 
-    public void Excute()
+    public void Excute(TankStatusFlag flag)
     {
-        eventListeners?.Invoke();
+        eventListeners?.Invoke(flag);
     }
-    public void SubscribeListener(Action listener)
+    public void SubscribeListener(Action<TankStatusFlag> listener)
     {
         eventListeners -= listener;
         eventListeners += listener;
     }
-    public void UnSubscribeListener(Action listener)
+    public void UnSubscribeListener(Action<TankStatusFlag> listener)
     {
         eventListeners -= listener;
     }

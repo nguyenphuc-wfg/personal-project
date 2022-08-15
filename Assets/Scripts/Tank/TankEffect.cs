@@ -11,6 +11,14 @@ public class TankEffect : MonoBehaviour
     [HideInInspector] public List<EffectData> ListEffect => listEffect;
     public bool AddEffect(EffectData effectdata)
     {
+        if (effectdata.EffectPropsType == EffectPropsType.NEGATIVE)
+        {
+            for (int i = listEffect.Count - 1; i >= 0; i--)
+            {
+                if (listEffect[i].EffectLogic is EffectImmune)
+                    return false;
+            }
+        }
         switch (effectdata.AddType)
         {
             case EffectAddType.NONE:
@@ -84,7 +92,7 @@ public class TankEffect : MonoBehaviour
 
     public void RemoveEffect(EffectData effect)
     {
-        effect.OnBeforeDestroy(_tankComponent);
+        effect.OnRemoveEffect(_tankComponent);
         Destroy(effect.VfxInstance);
         listEffect.Remove(effect);
     }
@@ -99,16 +107,14 @@ public class TankEffect : MonoBehaviour
 
     public void ClearEffect()
     {
-        for (int i = 0; i < listEffect.Count; i++)
+        for (int i = listEffect.Count - 1; i >= 0; i--)
         {
             RemoveEffect(listEffect[i]);
-            i--;
         }
     }
-
     private void Update()
     {
-        for (int i = 0; i < listEffect.Count; i++)
+        for (int i = listEffect.Count - 1; i >= 0; i--)
         {
             listEffect[i].OnUpdate(_tankComponent);
         }

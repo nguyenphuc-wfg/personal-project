@@ -6,41 +6,40 @@ public class TankStatus : MonoBehaviour
 {
     [SerializeField] private TankComponent _tankComponent;
     public TankComponent TankComponent { get { return _tankComponent; } }
+    public UnityEvent<TankStatusFlag> _event;
+    public TankStatusFlag flag;
 
-    public bool isRoot;
-    public bool isStun;
-    public bool isTimeStop;
-    public bool isSleep;
-    public EffectType _effectType;
-    public UnityEvent _event;
-    public void OnStun()
+    public void SetStatus(TankStatusFlag status)
     {
-        isStun = true;
-        _event.Invoke();
+        flag = flag.SetFlag(status);
+        _event.Invoke(flag);
     }
-    public void OffStun()
+    public void ClearStatus(TankStatusFlag status)
     {
-        isStun = false;
-        _event.Invoke();
+        flag = flag.ClearFlag(status);
+        _event.Invoke(flag);
     }
-    public void OnRoot()
+}
+[System.Flags]
+public enum TankStatusFlag : int
+{
+    SLEEP = 1 << 0,
+    STUN = 1 << 1,
+    ROOT = 1 << 2,
+}
+
+public static class TankStatusFlagExtention
+{
+    public static TankStatusFlag SetFlag(this TankStatusFlag current, TankStatusFlag flag)
     {
-        isRoot = true;
-        _event.Invoke();
+        return current | flag;
     }
-    public void OffRoot()
+    public static bool Hasflag(this TankStatusFlag current, TankStatusFlag flag)
     {
-        isRoot = false;
-        _event.Invoke();
+        return (current & flag) == current;
     }
-    public void OnSleep()
+    public static TankStatusFlag ClearFlag(this TankStatusFlag current, TankStatusFlag flag)
     {
-        isSleep = true;
-        _event.Invoke();
-    }
-    public void OffSleep()
-    {
-        isSleep = false;
-        _event.Invoke();
+        return current & ~flag;
     }
 }

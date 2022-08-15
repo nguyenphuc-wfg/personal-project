@@ -19,9 +19,9 @@ public abstract class EffectLogic : ScriptableObject
         effectData.SetCurrentTimeEffect(effectData.CurrentLifeTime - Time.deltaTime);
         if (effectData.CurrentLifeTime <= 0)
         {
-            OnBeforeDestroy(tankComps, effectData);
+            OnRemoveEffect(tankComps, effectData);
             tankComps.TankEffect.RemoveEffect(effectData);
         }
     }
-    public abstract void OnBeforeDestroy(TankComponent tankComps, EffectData effectData);
+    public abstract void OnRemoveEffect(TankComponent tankComps, EffectData effectData);
 }
