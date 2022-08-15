@@ -12,8 +12,8 @@ public class TankWeaponControl : MonoBehaviour
 
     public GameEvent changeWeaponEvent;
     private void OnEnable() {
-        ChangeWeapon();
         changeWeaponEvent.SubscribeListener(ChangeWeapon);
+        ChangeWeapon();
     }
 
     private void OnDisable() {
