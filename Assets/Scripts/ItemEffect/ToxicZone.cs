@@ -5,84 +5,87 @@ using UnityEngine;
 public class ToxicZone : MonoBehaviour
 {
     [SerializeField] private float _lifeTime;
-    [SerializeField] private Effect _effectToxic, _effectSlow;
+    [SerializeField] private EffectConfig[] _effects;
     [SerializeField] private ToxicZone _zone;
-    private Dictionary<TankComponent, Effect> _listEffectToxic = new Dictionary<TankComponent, Effect>();
-    private Dictionary<TankComponent, Effect> _listEffectSlow = new Dictionary<TankComponent, Effect>();
+    private List<KeyValuePair<TankComponent, EffectData>> _listEffect = new List<KeyValuePair<TankComponent, EffectData>>();
     private float _currentLifeTime = 0f;
-    private void OnEnable() {
+    private void OnEnable()
+    {
         _currentLifeTime = 0;
-        _listEffectToxic.Clear();
+        _listEffect.Clear();
     }
-    private void Update() {
+    private void Update()
+    {
         _currentLifeTime += Time.deltaTime;
-        if (_currentLifeTime >= _lifeTime) {
+        if (_currentLifeTime >= _lifeTime)
+        {
             TimeOutZone();
             gameObject.SetActive(false);
         }
     }
-    private void OnTriggerEnter(Collider target) {
+    private void OnTriggerEnter(Collider target)
+    {
         var tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-        if (!_listEffectToxic.ContainsKey(tankComponent)){
-            Effect effect = tankComponent.TankEffect.AddEffect(_effectToxic);
-            EffectToxic effectToxic = (EffectToxic) effect;
-            effectToxic.toxicZone = _zone;
-            _listEffectToxic.Add(tankComponent, effectToxic);
-            effect.SetCurrentTimeEffect(_lifeTime); 
-        }  
-        if (!_listEffectSlow.ContainsKey(tankComponent)){
-            Effect effect = tankComponent.TankEffect.AddEffect(_effectSlow);
-            EffectSlow effectSlow = (EffectSlow) effect;
-            effectSlow.source = _zone;
-            _listEffectSlow.Add(tankComponent, effect);
-            effect.SetCurrentTimeEffect(_lifeTime); 
-        }
-        _listEffectToxic[tankComponent].SetCurrentTimeEffect(_lifeTime);
-        _listEffectSlow[tankComponent].SetCurrentTimeEffect(_lifeTime);
+        TriggerTarget(tankComponent);
     }
-    private void OnTriggerStay(Collider target) {
+    private void OnTriggerStay(Collider target)
+    {
         var tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-        if (!_listEffectToxic.ContainsKey(tankComponent)){
-            Effect effect = tankComponent.TankEffect.AddEffect(_effectToxic);
-            EffectToxic effectToxic = (EffectToxic) effect;
-            effectToxic.toxicZone = _zone;
-            _listEffectToxic.Add(tankComponent, effectToxic);
-            effect.SetCurrentTimeEffect(_lifeTime); 
-        }  
-        if (!_listEffectSlow.ContainsKey(tankComponent)){
-            Effect effect = tankComponent.TankEffect.AddEffect(_effectSlow);
-            EffectSlow effectSlow = (EffectSlow) effect;
-            effectSlow.source = _zone;
-            _listEffectSlow.Add(tankComponent, effect);
-            effect.SetCurrentTimeEffect(_lifeTime); 
-        }
-        _listEffectToxic[tankComponent].SetCurrentTimeEffect(_lifeTime);
-        _listEffectSlow[tankComponent].SetCurrentTimeEffect(_lifeTime);
+        TriggerTarget(tankComponent);
     }
-    private void OnTriggerExit(Collider target) {
+    private void TriggerTarget(TankComponent tankComponent)
+    {
+        bool isConstain = false;
+        for (int i = 0; i < _listEffect.Count; i++)
+        {
+            if (_listEffect[i].Key == tankComponent)
+            {
+                isConstain = true;
+                _listEffect[i].Value.SetCurrentTimeEffect(_lifeTime + 1);
+            }
+        }
+        if (!isConstain)
+        {
+            foreach (var effect in _effects)
+            {
+                EffectData effectData = effect.CreateEffect();
+                tankComponent.TankEffect.AddEffect(effectData);
+                _listEffect.Add(new KeyValuePair<TankComponent, EffectData>(tankComponent, effectData));
+                effectData.SetCurrentTimeEffect(_lifeTime + 1);
+            }
+        }
+    }
+    private void OnTriggerExit(Collider target)
+    {
         var tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-        if (_listEffectToxic.ContainsKey(tankComponent))
-            _listEffectToxic[tankComponent]?.SetCurrentTimeEffect(0);
-        if (_listEffectSlow.ContainsKey(tankComponent))
-            _listEffectSlow[tankComponent]?.SetCurrentTimeEffect(0);
-    }
-    private void TimeOutZone(){
-        foreach (var item in _listEffectToxic){
-            item.Value.SetCurrentTimeEffect(0);
-        }
-         foreach (var item in _listEffectSlow){
-            item.Value.SetCurrentTimeEffect(0);
+        for (int i = 0; i < _listEffect.Count; i++)
+        {
+            if (_listEffect[i].Key == tankComponent)
+            {
+                _listEffect[i].Value.ResetCurrentLifeTime();
+            }
         }
     }
-    public void RemoveEffect(TankComponent target, Effect effect){
-        if (effect.GetType() == typeof(EffectSlow)){
-            _listEffectSlow.Remove(target);
-        }
-        if (effect.GetType() == typeof(EffectToxic)){
-            _listEffectToxic.Remove(target);
+    private void TimeOutZone()
+    {
+        foreach (var item in _listEffect)
+        {
+            if (item.Value == null) continue;
+            item.Value.ResetCurrentLifeTime();
         }
     }
+    // public void RemoveEffect(TankComponent target, Effect effect)
+    // {
+    //     if (effect.GetType() == typeof(EffectSlow))
+    //     {
+    //         _listEffectSlow.Remove(target);
+    //     }
+    //     if (effect.GetType() == typeof(EffectToxic))
+    //     {
+    //         _listEffectToxic.Remove(target);
+    //     }
+    // }
 }

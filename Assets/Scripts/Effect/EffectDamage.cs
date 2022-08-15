@@ -2,34 +2,28 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EffectDamage : Effect {
-    [SerializeField] private float _damage;
-    private void Start() {
-        ApplyEffect();
-    }
-    public void SetDamage(float damage){
-        _damage = damage;
-    }
-    protected override void ApplyEffect(){
-        List<Effect> listEffect = _target.TankEffect.ListEffect;
+[CreateAssetMenu(fileName = "EffectDamage", menuName = "Tanks/EffectLogic/EffectDamage", order = 0)]
+public class EffectDamage : EffectLogic
+{
+    protected override void ApplyEffect(TankComponent tankComps, EffectData effectData)
+    {
+        List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
 
-        float damage = _damage;
+        float damage;
         float shield = 0;
 
-        for (int i=0 ; i<listEffect.Count; i++){
-            if (listEffect[i] is EffectShield){
-                EffectShield effect = (EffectShield) listEffect[i];
-                shield = Mathf.Max(shield, effect.Percent);
-                damage = _damage * (1 - shield/100);
-            }
-            if (listEffect[i] is EffectSleep){
-                _target.TankEffect.RemoveEffect(listEffect[i]);
-            }
+        for (int i = 0; i < listEffect.Count; i++)
+        {
+            if (listEffect[i].EffectLogic is EffectShield)
+                shield = Mathf.Max(shield, listEffect[i].Value);
+            if (listEffect[i].EffectLogic is EffectSleep)
+                tankComps.TankEffect.RemoveEffect(listEffect[i]);
         }
-        _target.TankHealth.TakeDamage(damage);
-        _target.TankEffect.RemoveEffect(_effect);
+        damage = effectData.Value * (1 - shield / 100);
+        tankComps.TankHealth.TakeDamage(damage);
+        tankComps.TankEffect.RemoveEffect(effectData);
     }
-    public override void OnBeforeDestroy()
+    public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
     {
     }
 }

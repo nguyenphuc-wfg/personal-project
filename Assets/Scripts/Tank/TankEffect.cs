@@ -2,30 +2,113 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TankEffect : MonoBehaviour {
-    private List<Effect> listEffect = new List<Effect>();
-    public List<Effect> ListEffect {get {return listEffect;}}
+// Control add => remove effect 
+public class TankEffect : MonoBehaviour
+{
+    private List<EffectData> listEffect = new List<EffectData>();
+
     [SerializeField] private TankComponent _tankComponent;
-    public Effect AddEffect(Effect effect){
-        Effect effectInstance = Instantiate(effect, gameObject.transform);
-        effectInstance.SetUp(_tankComponent);
-        listEffect.Add(effectInstance);
-        return effectInstance;
+    [HideInInspector] public List<EffectData> ListEffect => listEffect;
+    public bool AddEffect(EffectData effectdata)
+    {
+        switch (effectdata.AddType)
+        {
+            case EffectAddType.NONE:
+                {
+                    effectdata.SetVFX(Instantiate(effectdata.VfxPrefab, this.transform));
+                    listEffect.Add(effectdata);
+                    effectdata.OnStart(_tankComponent);
+                    break;
+                }
+            case EffectAddType.REPLACE:
+                {
+                    bool isReplace = false;
+                    for (int i = 0; i < listEffect.Count; i++)
+                    {
+                        if (listEffect[i].EffectLogic.GetType() == effectdata.EffectLogic.GetType())
+                        {
+                            effectdata.VfxInstance = listEffect[i].VfxInstance;
+                            listEffect[i] = effectdata;
+                            isReplace = true;
+                            break;
+                        }
+                    }
+                    if (!isReplace)
+                    {
+                        effectdata.SetVFX(Instantiate(effectdata.VfxPrefab, this.transform));
+                        listEffect.Add(effectdata);
+                        effectdata.OnStart(_tankComponent);
+                    }
+
+                    break;
+                }
+            case EffectAddType.REPLACE_OVER:
+                {
+                    bool isReplace = false;
+                    for (int i = 0; i < listEffect.Count; i++)
+                    {
+                        if (listEffect[i].EffectLogic.GetType() == effectdata.EffectLogic.GetType())
+                        {
+                            if (listEffect[i].CurrentLifeTime >= effectdata.CurrentLifeTime) break;
+                            effectdata.VfxInstance = listEffect[i].VfxInstance;
+                            listEffect[i] = effectdata;
+                            isReplace = true;
+                            break;
+                        }
+                    }
+                    if (!isReplace)
+                    {
+                        effectdata.SetVFX(Instantiate(effectdata.VfxPrefab, this.transform));
+                        listEffect.Add(effectdata);
+                        effectdata.OnStart(_tankComponent);
+                    }
+                    break;
+                }
+            case EffectAddType.CUMULATIVE:
+                {
+                    for (int i = 0; i < listEffect.Count; i++)
+                    {
+                        if (listEffect[i].EffectLogic.GetType() == effectdata.EffectLogic.GetType())
+                        {
+                            if (listEffect[i].EffectLogic.GetType() == effectdata.EffectLogic.GetType())
+                            {
+
+                            }
+                        }
+                    }
+                    break;
+                }
+        }
+        return true;
     }
-    public void RemoveEffect(Effect effect){
-        effect.OnBeforeDestroy();
+
+    public void RemoveEffect(EffectData effect)
+    {
+        effect.OnBeforeDestroy(_tankComponent);
+        Destroy(effect.VfxInstance);
         listEffect.Remove(effect);
-        Destroy(effect.gameObject);
     }
-    public void ClearEffect(){
-        for (int i=0; i< listEffect.Count; i++){
+
+    private bool CheckEffectAlive(EffectType type)
+    {
+        foreach (var effect in listEffect)
+            if (effect.Type == type)
+                return true;
+        return false;
+    }
+
+    public void ClearEffect()
+    {
+        for (int i = 0; i < listEffect.Count; i++)
+        {
             RemoveEffect(listEffect[i]);
             i--;
-        }        
+        }
     }
-    private void Update() {
-        for (int i = 0; i < listEffect.Count; i++) {
-            listEffect[i].OnUpdate();
-        }   
+
+    private void Update()
+    {
+        for (int i = 0; i < listEffect.Count; i++)
+            listEffect[i].OnUpdate(_tankComponent);
     }
 }

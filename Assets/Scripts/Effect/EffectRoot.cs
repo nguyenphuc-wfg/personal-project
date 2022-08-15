@@ -2,29 +2,28 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EffectRoot : Effect {
-    private void Start() {
-        ApplyEffect();
-    }
-    protected override void ApplyEffect()
+[CreateAssetMenu(fileName = "EffectRoot", menuName = "Tanks/EffectLogic/EffectRoot", order = 0)]
+public class EffectRoot : EffectLogic
+{
+    public override void OnStart(TankComponent tankComps, EffectData effectData)
     {
-        List<Effect> listEffect = _target.TankEffect.ListEffect;
-        for (int i=0; i<listEffect.Count; i++){
-            if ((listEffect[i] is EffectImmune)){
-                _target.TankEffect.RemoveEffect(_effect);
+        ApplyEffect(tankComps, effectData);
+    }
+    protected override void ApplyEffect(TankComponent tankComps, EffectData effectData)
+    {
+        List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
+        for (int i = 0; i < listEffect.Count; i++)
+        {
+            if ((listEffect[i].EffectLogic is EffectImmune))
+            {
+                tankComps.TankEffect.RemoveEffect(effectData);
                 return;
             }
-            if (listEffect[i] is EffectRoot && listEffect[i] != _effect){
-                if (listEffect[i].TimeRemaining > _lifeTime)
-                    _target.TankEffect.RemoveEffect(_effect);
-                else 
-                    _target.TankEffect.RemoveEffect(listEffect[i]);
-            }
         }
-        _target.TankStatus.OnRoot();
+        tankComps.TankStatus.OnRoot();
     }
-    public override void OnBeforeDestroy()
+    public override void OnBeforeDestroy(TankComponent tankComps, EffectData effectData)
     {
-        _target.TankStatus.OffRoot();
+        tankComps.TankStatus.OffRoot();
     }
 }

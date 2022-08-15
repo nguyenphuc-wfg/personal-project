@@ -7,30 +7,45 @@ public class TankWeaponControl : MonoBehaviour
     [SerializeField] private Transform _fireTransform;
     [SerializeField] private WeaponStorage _weaponStorage;
     [SerializeField] private WeaponManager _weaponManager;
-    public int m_PlayerNumber = 1; 
+    public int m_PlayerNumber = 1;
     private GunWeapon _weapon;
-
+    private bool isDisable;
     public GameEvent changeWeaponEvent;
-    private void OnEnable() {
+    [SerializeField] private TankStatus _tankStatus;
+    [SerializeField] private TankEvent _tankEvent;
+    private void OnEnable()
+    {
+        _tankEvent.SubscribeListener(TankStatusEvent);
         changeWeaponEvent.SubscribeListener(ChangeWeapon);
         ChangeWeapon();
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
+        _tankEvent.UnSubscribeListener(TankStatusEvent);
         changeWeaponEvent.UnSubscribeListener(ChangeWeapon);
     }
-    private void Update() {
+    private void Update()
+    {
+        if (isDisable) return;
         _weapon.OnUpdate();
     }
-    public void ResetWeapon(){
+    public void ResetWeapon()
+    {
         _weapon.ResetWeapon();
     }
-    public void ChangeWeapon(){
-        _weapon = _weaponManager._weaponStorage[m_PlayerNumber-1].gun;
-        _weapon.SetUpData(_weaponManager._weaponStorage[m_PlayerNumber-1].dataGun);
+    public void ChangeWeapon()
+    {
+        _weapon = _weaponManager._weaponStorage[m_PlayerNumber - 1].gun;
+        _weapon.SetUpData(_weaponManager._weaponStorage[m_PlayerNumber - 1].dataGun);
         _weapon._fireTransform = _fireTransform;
         _weapon._owner = this.gameObject;
-        _weapon._bulletName = _weaponManager._weaponStorage[m_PlayerNumber-1].bulletName;
+        _weapon._bulletName = _weaponManager._weaponStorage[m_PlayerNumber - 1].bulletName;
         _weapon._idPlayer = m_PlayerNumber;
+    }
+    public void TankStatusEvent()
+    {
+        isDisable = _tankStatus.isSleep || _tankStatus.isStun;
+        if (isDisable) ResetWeapon();
     }
 }

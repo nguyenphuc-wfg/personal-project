@@ -1,26 +1,33 @@
 using UnityEngine;
 
-public class BulletDynamite : Bullet {
+public class BulletDynamite : Bullet
+{
     [SerializeField] private Light _light;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private float _speed;
-    [SerializeField] private Effect _effectStun;
-    
-    private void OnEnable() {
+    [SerializeField] private EffectConfig[] _effects;
+
+    private void OnEnable()
+    {
         _rigidbody.isKinematic = false;
         _rigidbody.velocity = transform.forward * _speed;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         _rigidbody.isKinematic = true;
-    }   
+    }
 
-    private void OnCollisionEnter(Collision target) {
+    private void OnCollisionEnter(Collision target)
+    {
 
         TankComponent tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-        GameObject newExplosion = Pool.Instance.Get("Explosion", transform.position, Quaternion.identity);
-        tankComponent.TankEffect.AddEffect(_effectStun);
+        Pool.Instance.Get("Explosion", transform.position, Quaternion.identity);
+        foreach (var effect in _effects)
+        {
+            tankComponent.TankEffect.AddEffect(effect.CreateEffect());
+        }
         gameObject.SetActive(false);
     }
 }
