@@ -30,7 +30,7 @@ public class SOGunWeapon : SOWeapon {
         FireOneBullet(_fireTransform.position, _fireTransform.rotation);
     }
     public void FireOneBullet(Vector3 pos, Quaternion rotation){
-        GameObject bullet = ObjectPooling.Instance.GetObject(_bulletName, pos, rotation);
+        GameObject bullet = Pool.Instance.Get(_bulletName, pos, rotation);
         bullet.GetComponent<Bullet>().InitStats(_owner);
         _currentFireBulletInround++;
         if (_currentFireBulletInround>= _bulletsPerRound)

@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
     {
         ClearTankEffect();
         DisableTankControl();
-        ObjectPooling.Instance.ReturnAllPool();
+        Pool.Instance.ReturnAllPool();
         m_RoundWinner = null;
 
         m_RoundWinner = GetRoundWinner();

@@ -15,7 +15,7 @@ public class BulletToxic : Bullet {
     }   
     private void OnCollisionEnter(Collision target) {
         Vector3 pos = new Vector3(transform.position.x, 0.1f, transform.position.z);
-        GameObject zone = ObjectPooling.Instance.GetObject("ToxicZone", pos, _toxicZone.transform.rotation);
+        GameObject zone = Pool.Instance.Get("ToxicZone", pos, _toxicZone.transform.rotation);
         zone.GetComponent<ParticleSystem>().Play();
         gameObject.SetActive(false);
     }

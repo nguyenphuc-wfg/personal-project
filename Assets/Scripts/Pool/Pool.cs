@@ -9,10 +9,10 @@ public class ObjPool {
     public string tag;
 }
 
-public class ObjectPooling : MonoBehaviour 
+public class Pool : MonoBehaviour 
 {
-    private static ObjectPooling instance;
-    public static ObjectPooling Instance {get{return instance;}}
+    private static Pool instance;
+    public static Pool Instance {get{return instance;}}
 
     [SerializeField] List<ObjPool> listPrefabs = new List<ObjPool>();
 
@@ -38,7 +38,7 @@ public class ObjectPooling : MonoBehaviour
             pool.Add(item.tag, prefabs);
         }
     }
-    public GameObject GetObject(string tag, Vector3 pos, Quaternion rot){
+    public GameObject Get(string tag, Vector3 pos, Quaternion rot){
         if (!pool.ContainsKey(tag)) return null;
 
         foreach (GameObject item in pool[tag]) {

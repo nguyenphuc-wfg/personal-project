@@ -39,7 +39,7 @@ public abstract class GunWeapon : Weapon
 
     protected void FireOneBullet(Vector3 pos, Quaternion rotation)
     {
-        GameObject bullet = ObjectPooling.Instance.GetObject(_bulletName, pos, rotation);
+        GameObject bullet = Pool.Instance.Get(_bulletName, pos, rotation);
         bullet.GetComponent<Bullet>().InitStats(_owner);
         // Instantiate(_bullet,pos ,rotation );
         _currentFireBulletInround++;

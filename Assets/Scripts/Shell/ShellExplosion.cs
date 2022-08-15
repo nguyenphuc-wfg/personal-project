@@ -51,7 +51,7 @@ public class ShellExplosion : MonoBehaviour
         }
         m_Light.enabled = false;
 
-        // m_ExplosionParticles = ObjectPooling.Instance.GetObject("Explosion").GetComponent<ParticleSystem>();
+        // m_ExplosionParticles = Pool.Instance.Get("Explosion").GetComponent<ParticleSystem>();
 
         m_ExplosionParticles.transform.position = transform.position;
         m_ExplosionParticles.Play();

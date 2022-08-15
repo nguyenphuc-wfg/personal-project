@@ -19,7 +19,7 @@ public class BulletDynamite : Bullet {
 
         TankComponent tankComponent = target.gameObject.GetComponent<TankComponent>();
         if (!tankComponent) return;
-        GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
+        GameObject newExplosion = Pool.Instance.Get("Explosion", transform.position, Quaternion.identity);
         tankComponent.TankEffect.AddEffect(_effectStun);
         gameObject.SetActive(false);
     }

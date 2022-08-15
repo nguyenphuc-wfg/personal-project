@@ -38,7 +38,6 @@ public class BulletFindWay : Bullet {
         EffectDamage effect = (EffectDamage) tankComponent.TankEffect.AddEffect(_effectDamage);
         effect.SetDamage(_damage);
         tankComponent.TankEffect.AddEffect(_effectRoot);
-        // GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
     private void Radaring(){

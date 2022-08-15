@@ -22,7 +22,7 @@ public class BulletNormal : Bullet {
             effect.SetDamage(_damage);
         }
           
-        GameObject newExplosion = ObjectPooling.Instance.GetObject("Explosion", transform.position, Quaternion.identity);
+        GameObject newExplosion = Pool.Instance.Get("Explosion", transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
 }
