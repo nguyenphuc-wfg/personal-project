@@ -96,7 +96,14 @@ public class TankEffect : MonoBehaviour
         Destroy(effect.VfxInstance);
         listEffect.Remove(effect);
     }
-
+    public void RemoveEffectTypeProps(EffectPropsType effect)
+    {
+        for (int i = listEffect.Count - 1; i >= 0; i--)
+        {
+            if (effect == listEffect[i].EffectPropsType)
+                RemoveEffect(listEffect[i]);
+        }
+    }
     private bool CheckEffectAlive(EffectType type)
     {
         foreach (var effect in listEffect)
@@ -112,6 +119,7 @@ public class TankEffect : MonoBehaviour
             RemoveEffect(listEffect[i]);
         }
     }
+
     private void Update()
     {
         for (int i = listEffect.Count - 1; i >= 0; i--)

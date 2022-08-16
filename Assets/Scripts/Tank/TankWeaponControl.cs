@@ -13,6 +13,8 @@ public class TankWeaponControl : MonoBehaviour
     public GameEvent changeWeaponEvent;
     [SerializeField] private TankStatus _tankStatus;
     [SerializeField] private TankEvent _tankEvent;
+
+    [SerializeField] private TankStatusFlag[] _arrEffectDisableWeapon;
     private void OnEnable()
     {
         _tankEvent.SubscribeListener(TankStatusEvent);
@@ -48,7 +50,15 @@ public class TankWeaponControl : MonoBehaviour
     }
     public void TankStatusEvent(TankStatusFlag flag)
     {
-        isDisable = flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
+        isDisable = false;
+        foreach (var disableStatus in _arrEffectDisableWeapon)
+        {
+            if (flag.HasFlag(disableStatus))
+            {
+                isDisable = true;
+                break;
+            }
+        }
         if (isDisable) ResetWeapon();
     }
 }

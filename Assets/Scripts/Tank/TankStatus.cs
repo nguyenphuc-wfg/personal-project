@@ -4,8 +4,6 @@ using UnityEngine.Events;
 
 public class TankStatus : MonoBehaviour
 {
-    [SerializeField] private TankComponent _tankComponent;
-    public TankComponent TankComponent { get { return _tankComponent; } }
     public UnityEvent<TankStatusFlag> _event;
     public TankStatusFlag flag;
 

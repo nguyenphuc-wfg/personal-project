@@ -24,7 +24,8 @@ public class TankMovement : MonoBehaviour
     private bool isDisableRotate;
     [SerializeField] private TankStatus _tankStatus;
     [SerializeField] private TankEvent _tankEvent;
-
+    [SerializeField] private TankStatusFlag[] _arrEffectDisableMove;
+    [SerializeField] private TankStatusFlag[] _arrEffectDisableRotate;
     private void Awake()
     {
         m_Speed = m_TankStats.M_Speed;
@@ -119,8 +120,23 @@ public class TankMovement : MonoBehaviour
     }
     public void TankStatusEvent(TankStatusFlag flag)
     {
-
-        isDisableMove = flag.HasFlag(TankStatusFlag.ROOT) || flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
-        isDisableRotate = flag.HasFlag(TankStatusFlag.STUN) || flag.HasFlag(TankStatusFlag.SLEEP);
+        isDisableMove = false;
+        isDisableRotate = false;
+        foreach (var disableStatus in _arrEffectDisableMove)
+        {
+            if (flag.HasFlag(disableStatus))
+            {
+                isDisableMove = true;
+                break;
+            }
+        }
+        foreach (var disableStatus in _arrEffectDisableRotate)
+        {
+            if (flag.HasFlag(disableStatus))
+            {
+                isDisableRotate = true;
+                break;
+            }
+        }
     }
 }

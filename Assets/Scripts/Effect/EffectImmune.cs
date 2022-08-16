@@ -11,12 +11,7 @@ public class EffectImmune : EffectLogic
     }
     protected override void ApplyEffect(TankComponent tankComps, EffectData effectData)
     {
-        List<EffectData> listEffect = tankComps.TankEffect.ListEffect;
-        for (int i = listEffect.Count - 1; i >= 0; i--)
-        {
-            if (listEffect[i].EffectPropsType == EffectPropsType.NEGATIVE)
-                tankComps.TankEffect.RemoveEffect(listEffect[i]);
-        }
+        tankComps.TankEffect.RemoveEffectTypeProps(EffectPropsType.NEGATIVE);
     }
     public override void OnRemoveEffect(TankComponent tankComps, EffectData effectData)
     {
