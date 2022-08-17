@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
-using FusionExamples.FusionHelpers;
+using FishNetworking.FusionHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-namespace FusionExamples.Tanknarok
+namespace FishNetworking.Tanknarok
 {
     /// <summary>
     /// The LevelManager controls the map - keeps track of spawn points for players and powerups, and spawns powerups at regular intervals.

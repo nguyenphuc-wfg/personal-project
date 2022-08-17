@@ -1,186 +1,186 @@
 using UnityEngine;
 using Fusion;
 
-namespace FusionExamples.Tanknarok
+namespace FishNetworking.Tanknarok
 {
-	public class GameManager : NetworkBehaviour, IStateAuthorityChanged
-	{
-		public enum PlayState
-		{
-			LOBBY,
-			LEVEL,
-			TRANSITION
-		}
+    public class GameManager : NetworkBehaviour, IStateAuthorityChanged
+    {
+        public enum PlayState
+        {
+            LOBBY,
+            LEVEL,
+            TRANSITION
+        }
 
-		[Networked]
-		private int networkedWinningPlayerIndex { get; set; } = -1;
+        [Networked]
+        private int networkedWinningPlayerIndex { get; set; } = -1;
 
-		[Networked]
-		private PlayState networkedPlayState { get; set; }
+        [Networked]
+        private PlayState networkedPlayState { get; set; }
 
-		public static PlayState playState
-		{
-			get => (instance != null && instance.Object != null && instance.Object.IsValid) ?  instance.networkedPlayState : PlayState.LOBBY;
-			set
-			{
-				if (instance != null && instance.Object != null && instance.Object.IsValid)
-					instance.networkedPlayState = value;
-			}
-		}
-
-		public static int WinningPlayerIndex
-		{
-			get => (instance != null && instance.Object != null && instance.Object.IsValid) ? instance.networkedWinningPlayerIndex : -1;
-			set
-			{
-				if (instance != null && instance.Object != null && instance.Object.IsValid)
-					instance.networkedWinningPlayerIndex = value;
-			}
-		}
-
-		public const byte MAX_LIVES = 3;
-		public const byte MAX_SCORE = 3;
-
-		private ScoreManager _scoreManager;
-		private LevelManager _levelManager;
-
-		private bool _restart;
-
-		public static GameManager instance { get; private set; }
-
-		public override void Spawned()
-		{
-			// We only want one GameManager
-			if (instance)
-				Runner.Despawn(Object); // TODO: I've never seen this happen - do we really need this check?
-			else
-			{
-				instance = this;
-
-				// Find managers and UI
-				_levelManager = FindObjectOfType<LevelManager>(true);
-
-				if (Object.HasStateAuthority)
-				{
-					LoadLevel(-1,-1);
-				}
-				else if(playState!=PlayState.LOBBY)
-				{
-					Debug.Log("Rejecting Player, game is already running!");
-					_restart = true;
-				}
-			}
-		}
-
-		public void OnTankDeath()
-		{
-			if (playState != PlayState.LOBBY)
-			{
-				int playersleft = PlayerManager.PlayersAlive();
-				Debug.Log($"Someone died - {playersleft} left");
-				if (playersleft<=1)
-				{
-					Player lastPlayerStanding = playersleft == 0 ? null : PlayerManager.GetFirstAlivePlayer();
-					// if there is only one player, who died from a laser (e.g.) we don't award scores. 
-          if (lastPlayerStanding != null)
-          {
-            int winningPlayerIndex = lastPlayerStanding.playerID;
-            int nextLevelIndex = _levelManager.GetRandomLevelIndex();
-            byte winningPlayerScore = (byte)(lastPlayerStanding.score + 1);
-            if (winningPlayerIndex >= 0)
+        public static PlayState playState
+        {
+            get => (instance != null && instance.Object != null && instance.Object.IsValid) ? instance.networkedPlayState : PlayState.LOBBY;
+            set
             {
-	            Player winner = PlayerManager.GetPlayerFromID(winningPlayerIndex);
-	            if (winner.Object.HasStateAuthority)
-		            winner.score = winningPlayerScore;
-	            if (winningPlayerScore >= MAX_SCORE)
-		            nextLevelIndex = -1;
+                if (instance != null && instance.Object != null && instance.Object.IsValid)
+                    instance.networkedPlayState = value;
             }
-            LoadLevel( nextLevelIndex, winningPlayerIndex);
-          }
-				}
-			}
-		}
+        }
 
-		public void Restart(ShutdownReason shutdownReason)
-		{
-			if (!Runner.IsShutdown)
-			{
-				// Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
-				Runner.Shutdown(false,shutdownReason);
-				instance = null;
-				_restart = false;
-			}
-		}
+        public static int WinningPlayerIndex
+        {
+            get => (instance != null && instance.Object != null && instance.Object.IsValid) ? instance.networkedWinningPlayerIndex : -1;
+            set
+            {
+                if (instance != null && instance.Object != null && instance.Object.IsValid)
+                    instance.networkedWinningPlayerIndex = value;
+            }
+        }
 
-		public const ShutdownReason ShutdownReason_GameAlreadyRunning = (ShutdownReason)100;
+        public const byte MAX_LIVES = 3;
+        public const byte MAX_SCORE = 3;
 
-		private void Update()
-		{
-			if (_restart || Input.GetKeyDown(KeyCode.Escape))
-			{
-				Restart( _restart ? ShutdownReason_GameAlreadyRunning : ShutdownReason.Ok);
-				return;
-			}
-			PlayerManager.HandleNewPlayers();
-		}
+        private ScoreManager _scoreManager;
+        private LevelManager _levelManager;
 
-		private void ResetStats()
-		{
-			for (int i = 0; i < PlayerManager.allPlayers.Count; i++)
-			{
-				Debug.Log($"Resetting player {i} stats to lives={MAX_LIVES}");
-				PlayerManager.allPlayers[i].lives = MAX_LIVES;
-				PlayerManager.allPlayers[i].score = 0;
-			}
-		}
+        private bool _restart;
 
-		private void ResetLives()
-		{
-			for (int i = 0; i < PlayerManager.allPlayers.Count; i++)
-			{
-				Debug.Log($"Resetting player {i} lives to {MAX_LIVES}");
-				PlayerManager.allPlayers[i].lives = MAX_LIVES;
-			}
-		}
+        public static GameManager instance { get; private set; }
 
-		// Transition from lobby to level
-		public void OnAllPlayersReady()
-		{
-			Debug.Log("All players are ready");
-			if (playState!=PlayState.LOBBY)
-				return;
+        public override void Spawned()
+        {
+            // We only want one GameManager
+            if (instance)
+                Runner.Despawn(Object); // TODO: I've never seen this happen - do we really need this check?
+            else
+            {
+                instance = this;
 
-			// Reset stats and transition to level.
-			ResetStats();
+                // Find managers and UI
+                _levelManager = FindObjectOfType<LevelManager>(true);
 
-			// close and hide the session from matchmaking / lists. this demo does not allow late join.
-      Runner.SessionInfo.IsOpen = false;
-      Runner.SessionInfo.IsVisible = false;
+                if (Object.HasStateAuthority)
+                {
+                    LoadLevel(-1, -1);
+                }
+                else if (playState != PlayState.LOBBY)
+                {
+                    Debug.Log("Rejecting Player, game is already running!");
+                    _restart = true;
+                }
+            }
+        }
 
-	    LoadLevel(_levelManager.GetRandomLevelIndex(),-1);
-		}
-		
-		private void LoadLevel(int nextLevelIndex, int winningPlayerIndex)
-		{
-			if (!Object.HasStateAuthority)
-				return;
+        public void OnTankDeath()
+        {
+            if (playState != PlayState.LOBBY)
+            {
+                int playersleft = PlayerManager.PlayersAlive();
+                Debug.Log($"Someone died - {playersleft} left");
+                if (playersleft <= 1)
+                {
+                    Player lastPlayerStanding = playersleft == 0 ? null : PlayerManager.GetFirstAlivePlayer();
+                    // if there is only one player, who died from a laser (e.g.) we don't award scores. 
+                    if (lastPlayerStanding != null)
+                    {
+                        int winningPlayerIndex = lastPlayerStanding.playerID;
+                        int nextLevelIndex = _levelManager.GetRandomLevelIndex();
+                        byte winningPlayerScore = (byte)(lastPlayerStanding.score + 1);
+                        if (winningPlayerIndex >= 0)
+                        {
+                            Player winner = PlayerManager.GetPlayerFromID(winningPlayerIndex);
+                            if (winner.Object.HasStateAuthority)
+                                winner.score = winningPlayerScore;
+                            if (winningPlayerScore >= MAX_SCORE)
+                                nextLevelIndex = -1;
+                        }
+                        LoadLevel(nextLevelIndex, winningPlayerIndex);
+                    }
+                }
+            }
+        }
 
-			// Reset lives and transition to level
-			ResetLives();
+        public void Restart(ShutdownReason shutdownReason)
+        {
+            if (!Runner.IsShutdown)
+            {
+                // Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
+                Runner.Shutdown(false, shutdownReason);
+                instance = null;
+                _restart = false;
+            }
+        }
 
-			// Reset players ready state so we don't launch immediately
-			for (int i = 0; i < PlayerManager.allPlayers.Count; i++)
-				PlayerManager.allPlayers[i].ResetReady();
+        public const ShutdownReason ShutdownReason_GameAlreadyRunning = (ShutdownReason)100;
 
-			// Start transition
-			WinningPlayerIndex = winningPlayerIndex;
+        private void Update()
+        {
+            if (_restart || Input.GetKeyDown(KeyCode.Escape))
+            {
+                Restart(_restart ? ShutdownReason_GameAlreadyRunning : ShutdownReason.Ok);
+                return;
+            }
+            PlayerManager.HandleNewPlayers();
+        }
 
-			_levelManager.LoadLevel(nextLevelIndex);
-		}
+        private void ResetStats()
+        {
+            for (int i = 0; i < PlayerManager.allPlayers.Count; i++)
+            {
+                Debug.Log($"Resetting player {i} stats to lives={MAX_LIVES}");
+                PlayerManager.allPlayers[i].lives = MAX_LIVES;
+                PlayerManager.allPlayers[i].score = 0;
+            }
+        }
 
-		public void StateAuthorityChanged()
-		{
-			Debug.Log($"State Authority of GameManager changed: {Object.StateAuthority}");
-		}
-	}
+        private void ResetLives()
+        {
+            for (int i = 0; i < PlayerManager.allPlayers.Count; i++)
+            {
+                Debug.Log($"Resetting player {i} lives to {MAX_LIVES}");
+                PlayerManager.allPlayers[i].lives = MAX_LIVES;
+            }
+        }
+
+        // Transition from lobby to level
+        public void OnAllPlayersReady()
+        {
+            Debug.Log("All players are ready");
+            if (playState != PlayState.LOBBY)
+                return;
+
+            // Reset stats and transition to level.
+            ResetStats();
+
+            // close and hide the session from matchmaking / lists. this demo does not allow late join.
+            Runner.SessionInfo.IsOpen = false;
+            Runner.SessionInfo.IsVisible = false;
+
+            LoadLevel(_levelManager.GetRandomLevelIndex(), -1);
+        }
+
+        private void LoadLevel(int nextLevelIndex, int winningPlayerIndex)
+        {
+            if (!Object.HasStateAuthority)
+                return;
+
+            // Reset lives and transition to level
+            ResetLives();
+
+            // Reset players ready state so we don't launch immediately
+            for (int i = 0; i < PlayerManager.allPlayers.Count; i++)
+                PlayerManager.allPlayers[i].ResetReady();
+
+            // Start transition
+            WinningPlayerIndex = winningPlayerIndex;
+
+            _levelManager.LoadLevel(nextLevelIndex);
+        }
+
+        public void StateAuthorityChanged()
+        {
+            Debug.Log($"State Authority of GameManager changed: {Object.StateAuthority}");
+        }
+    }
 }

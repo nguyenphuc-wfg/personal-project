@@ -1,32 +1,32 @@
-using FusionExamples.Utility;
+using FishNetworking.Utility;
 using UnityEngine;
 using TMPro;
 
-namespace FusionExamples.Tanknarok
+namespace FishNetworking.Tanknarok
 {
-	public class ScoreLobbyUI : PooledObject
-	{
-		[SerializeField] private SpriteRenderer _crown;
-		[SerializeField] private TextMeshPro _score;
-		[SerializeField] private TextMeshPro _playerName;
+    public class ScoreLobbyUI : PooledObject
+    {
+        [SerializeField] private SpriteRenderer _crown;
+        [SerializeField] private TextMeshPro _score;
+        [SerializeField] private TextMeshPro _playerName;
 
-		public void SetPlayerName(Player player)
-		{
-			_playerName.text = player.playerName.Value;
+        public void SetPlayerName(Player player)
+        {
+            _playerName.text = player.playerName.Value;
 
-			Color textColor = player.playerMaterial.GetColor("_SilhouetteColor");
-			_score.color = textColor;
-			_playerName.color = textColor;
-		}
+            Color textColor = player.playerMaterial.GetColor("_SilhouetteColor");
+            _score.color = textColor;
+            _playerName.color = textColor;
+        }
 
-		public void SetScore(int newScore)
-		{
-			_score.text = newScore.ToString();
-		}
+        public void SetScore(int newScore)
+        {
+            _score.text = newScore.ToString();
+        }
 
-		public void ToggleCrown(bool on)
-		{
-			_crown.enabled = on;
-		}
-	}
+        public void ToggleCrown(bool on)
+        {
+            _crown.enabled = on;
+        }
+    }
 }

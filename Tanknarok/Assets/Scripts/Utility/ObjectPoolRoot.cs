@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace FusionExamples.Utility
+namespace FishNetworking.Utility
 {
-	public class ObjectPoolRoot : MonoBehaviour
-	{
-	}
+    public class ObjectPoolRoot : MonoBehaviour
+    {
+    }
 }

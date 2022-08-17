@@ -1,73 +1,73 @@
 using System.Collections;
-using FusionExamples.Utility;
+using FishNetworking.Utility;
 using UnityEngine;
 using TMPro;
 
-namespace FusionExamples.Tanknarok
+namespace FishNetworking.Tanknarok
 {
-	public class ScoreGameUI : PooledObject
-	{
-		[SerializeField] private TextMeshProUGUI _score;
-		[SerializeField] private AudioEmitter _audioEmitter;
+    public class ScoreGameUI : PooledObject
+    {
+        [SerializeField] private TextMeshProUGUI _score;
+        [SerializeField] private AudioEmitter _audioEmitter;
 
-		private byte _currentScore;
-		private bool _active;
+        private byte _currentScore;
+        private bool _active;
 
-		public void Initialize(Player player)
-		{
-			ResetScore();
-			HideScore();
+        public void Initialize(Player player)
+        {
+            ResetScore();
+            HideScore();
 
-			Color scoreColor = player.playerMaterial.GetColor("_SilhouetteColor");
-			_score.color = scoreColor;
-		}
+            Color scoreColor = player.playerMaterial.GetColor("_SilhouetteColor");
+            _score.color = scoreColor;
+        }
 
-		public void ShowScore()
-		{
-			_score.enabled = true;
-		}
+        public void ShowScore()
+        {
+            _score.enabled = true;
+        }
 
-		public void HideScore()
-		{
-			_score.enabled = false;
-		}
+        public void HideScore()
+        {
+            _score.enabled = false;
+        }
 
-		public void ResetScore()
-		{
-			_currentScore = 0;
-			_score.text = "0";
-		}
+        public void ResetScore()
+        {
+            _currentScore = 0;
+            _score.text = "0";
+        }
 
-		public void SetNewScore(byte score)
-		{
-			_currentScore = score;
+        public void SetNewScore(byte score)
+        {
+            _currentScore = score;
 
-			StartCoroutine(IncreaseScoreSequence(1f));
-		}
+            StartCoroutine(IncreaseScoreSequence(1f));
+        }
 
-		private IEnumerator IncreaseScoreSequence(float switchDelay)
-		{
-			ShowScore();
-			_active = true;
+        private IEnumerator IncreaseScoreSequence(float switchDelay)
+        {
+            ShowScore();
+            _active = true;
 
-			yield return new WaitForSeconds(switchDelay);
+            yield return new WaitForSeconds(switchDelay);
 
-			_score.text = _currentScore.ToString();
-			_score.transform.localScale = Vector3.one * 2f;
+            _score.text = _currentScore.ToString();
+            _score.transform.localScale = Vector3.one * 2f;
 
-			_audioEmitter.PlayOneShot();
+            _audioEmitter.PlayOneShot();
 
-			yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f);
 
-			_active = false;
-		}
+            _active = false;
+        }
 
-		private void Update()
-		{
-			if (!_active)
-				return;
+        private void Update()
+        {
+            if (!_active)
+                return;
 
-			_score.transform.localScale = Vector3.Lerp(_score.transform.localScale, Vector3.one, Time.deltaTime * 3f);
-		}
-	}
+            _score.transform.localScale = Vector3.Lerp(_score.transform.localScale, Vector3.one, Time.deltaTime * 3f);
+        }
+    }
 }

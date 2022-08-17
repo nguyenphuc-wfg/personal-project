@@ -1,47 +1,47 @@
 using UnityEngine;
 
-namespace FusionExamples.Tanknarok
+namespace FishNetworking.Tanknarok
 {
-	public class TankTeleportOutEffect : MonoBehaviour
-	{
-		private Player _player;
+    public class TankTeleportOutEffect : MonoBehaviour
+    {
+        private Player _player;
 
-		[SerializeField] private GameObject _dummyTank;
-		private Transform _dummyTankTurret;
-		private Transform _dummyTankHull;
+        [SerializeField] private GameObject _dummyTank;
+        private Transform _dummyTankTurret;
+        private Transform _dummyTankHull;
 
-		[SerializeField] private ParticleSystem _teleportEffect;
+        [SerializeField] private ParticleSystem _teleportEffect;
 
-		[Header("Audio")] [SerializeField] private AudioEmitter _audioEmitter;
+        [Header("Audio")][SerializeField] private AudioEmitter _audioEmitter;
 
-		// Initialize dummy tank and set colors based on the assigned player
-		public void Initialize(Player player)
-		{
-			_player = player;
+        // Initialize dummy tank and set colors based on the assigned player
+        public void Initialize(Player player)
+        {
+            _player = player;
 
-			_dummyTankTurret = _dummyTank.transform.Find("EnergyTankOut_Turret");
-			_dummyTankHull = _dummyTank.transform.Find("EnergyTankOut_Hull");
-			_dummyTank.SetActive(false);
+            _dummyTankTurret = _dummyTank.transform.Find("EnergyTankOut_Turret");
+            _dummyTankHull = _dummyTank.transform.Find("EnergyTankOut_Hull");
+            _dummyTank.SetActive(false);
 
-			ColorChanger.ChangeColor(transform, player.playerColor);
-			
-			_teleportEffect.Stop();
-		}
+            ColorChanger.ChangeColor(transform, player.playerColor);
 
-		public void StartTeleport()
-		{
-			if(_audioEmitter.isActiveAndEnabled)
-				_audioEmitter.PlayOneShot();
+            _teleportEffect.Stop();
+        }
 
-			transform.position = _player.transform.position;
+        public void StartTeleport()
+        {
+            if (_audioEmitter.isActiveAndEnabled)
+                _audioEmitter.PlayOneShot();
 
-			_dummyTank.SetActive(false);
-			_dummyTank.SetActive(true);
+            transform.position = _player.transform.position;
 
-			_dummyTankTurret.rotation = _player.turretRotation;
-			_dummyTankHull.rotation = _player.hullRotation;
+            _dummyTank.SetActive(false);
+            _dummyTank.SetActive(true);
 
-			_teleportEffect.Play();
-		}
-	}
+            _dummyTankTurret.rotation = _player.turretRotation;
+            _dummyTankHull.rotation = _player.hullRotation;
+
+            _teleportEffect.Play();
+        }
+    }
 }

@@ -165,12 +165,12 @@ MonoBehaviour:
   Flags: 2305
   NetworkGuid:
     RawGuidValue: 0fea34c6051f8e347b4997546efbf2b9
-  NestedObjects:
-  - {fileID: 4889669591510590674}
-  - {fileID: 3348514454871179169}
+  NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2626151519630305843}
   - {fileID: 6364121443989162311}
+  - {fileID: 4355108306620267355}
+  - {fileID: 5896262357187551272}
   SimulationBehaviours: []
 --- !u!114 &2626151519630305843
 MonoBehaviour:
@@ -519,17 +519,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8372832ee82c1094bb611725d3bb6083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4889669591510590674 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -3561566708561188795, guid: 8479f959d061a7e419469699232cd157, type: 3}
-  m_PrefabInstance: {fileID: 957399083819912343}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6983558914713393124
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -607,17 +596,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8479f959d061a7e419469699232cd157, type: 3}
---- !u!114 &3348514454871179169 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -3561566708561188795, guid: 8479f959d061a7e419469699232cd157, type: 3}
-  m_PrefabInstance: {fileID: 6983558914713393124}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5896262357187551272 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3546917355481921484, guid: 8479f959d061a7e419469699232cd157, type: 3}
