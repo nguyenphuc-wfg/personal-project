@@ -5,17 +5,17 @@ using Fusion.Sockets;
 using UnityEngine;
 using FishNetworking.Tanknarok;
 
-namespace FishNetworking.FusionHelpers
+namespace FishNetworking.FishnetHelpers
 {
     /// <summary>
     /// Small helper that provides a simple world/player pattern for launching Fusion
     /// </summary>
-    public class FusionLauncher : MonoBehaviour, INetworkRunnerCallbacks
+    public class FishnetLauncher : MonoBehaviour, INetworkRunnerCallbacks
     {
         private NetworkRunner _runner;
         private Action<NetworkRunner, ConnectionStatus, string> _connectionCallback;
         private ConnectionStatus _status;
-        private FusionObjectPoolRoot _pool;
+        private FishnetObjectPoolRoot _pool;
         private Action<NetworkRunner> _spawnWorldCallback;
         private Action<NetworkRunner, PlayerRef> _spawnPlayerCallback;
         private Action<NetworkRunner, PlayerRef> _despawnPlayerCallback;
@@ -52,7 +52,7 @@ namespace FishNetworking.FusionHelpers
             _runner.ProvideInput = mode != GameMode.Server;
 
             if (_pool == null)
-                _pool = gameObject.AddComponent<FusionObjectPoolRoot>();
+                _pool = gameObject.AddComponent<FishnetObjectPoolRoot>();
 
             await _runner.StartGame(new StartGameArgs()
             {

@@ -2,24 +2,24 @@ using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
 
-namespace FishNetworking.FusionHelpers
+namespace FishNetworking.FishnetHelpers
 {
     /// <summary>
     /// Example of a Fusion Object Pool.
     /// The pool keeps a list of available instances by prefab and also a list of which pool each instance belongs to.
     /// </summary>
 
-    public class FusionObjectPoolRoot : MonoBehaviour, INetworkObjectPool
+    public class FishnetObjectPoolRoot : MonoBehaviour, INetworkObjectPool
     {
-        private Dictionary<object, FusionObjectPool> _poolsByPrefab = new Dictionary<object, FusionObjectPool>();
-        private Dictionary<NetworkObject, FusionObjectPool> _poolsByInstance = new Dictionary<NetworkObject, FusionObjectPool>();
+        private Dictionary<object, FishnetObjectPool> _poolsByPrefab = new Dictionary<object, FishnetObjectPool>();
+        private Dictionary<NetworkObject, FishnetObjectPool> _poolsByInstance = new Dictionary<NetworkObject, FishnetObjectPool>();
 
-        public FusionObjectPool GetPool<T>(T prefab) where T : NetworkObject
+        public FishnetObjectPool GetPool<T>(T prefab) where T : NetworkObject
         {
-            FusionObjectPool pool;
+            FishnetObjectPool pool;
             if (!_poolsByPrefab.TryGetValue(prefab, out pool))
             {
-                pool = new FusionObjectPool();
+                pool = new FishnetObjectPool();
                 _poolsByPrefab[prefab] = pool;
             }
 
@@ -31,7 +31,7 @@ namespace FishNetworking.FusionHelpers
             NetworkObject prefab;
             if (NetworkProjectConfig.Global.PrefabTable.TryGetPrefab(info.Prefab, out prefab))
             {
-                FusionObjectPool pool = GetPool(prefab);
+                FishnetObjectPool pool = GetPool(prefab);
                 NetworkObject newt = pool.GetFromPool(Vector3.zero, Quaternion.identity);
 
                 if (newt == null)
@@ -53,7 +53,7 @@ namespace FishNetworking.FusionHelpers
             Debug.Log($"Releasing {no} instance, isSceneObject={isSceneObject}");
             if (no != null)
             {
-                FusionObjectPool pool;
+                FishnetObjectPool pool;
                 if (_poolsByInstance.TryGetValue(no, out pool))
                 {
                     pool.ReturnToPool(no);
@@ -71,17 +71,17 @@ namespace FishNetworking.FusionHelpers
 
         public void ClearPools()
         {
-            foreach (FusionObjectPool pool in _poolsByPrefab.Values)
+            foreach (FishnetObjectPool pool in _poolsByPrefab.Values)
             {
                 pool.Clear();
             }
 
-            foreach (FusionObjectPool pool in _poolsByInstance.Values)
+            foreach (FishnetObjectPool pool in _poolsByInstance.Values)
             {
                 pool.Clear();
             }
 
-            _poolsByPrefab = new Dictionary<object, FusionObjectPool>();
+            _poolsByPrefab = new Dictionary<object, FishnetObjectPool>();
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
-using FishNetworking.FusionHelpers;
+using FishNetworking.FishnetHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -24,7 +24,7 @@ namespace FishNetworking.Tanknarok
         private ReadyupManager _readyupManager;
         private CountdownManager _countdownManager;
 
-        public FusionLauncher launcher { get; set; }
+        public FishnetLauncher launcher { get; set; }
 
         private void Awake()
         {
@@ -114,7 +114,7 @@ namespace FishNetworking.Tanknarok
             _transitionEffect.ToggleGlitch(true);
             _audioEmitter.Play();
 
-            launcher.SetConnectionStatus(FusionLauncher.ConnectionStatus.Loading, "");
+            launcher.SetConnectionStatus(FishnetLauncher.ConnectionStatus.Loading, "");
 
             _scoreManager.HideLobbyScore();
 
@@ -142,7 +142,7 @@ namespace FishNetworking.Tanknarok
             // Delay one frame
             yield return null;
 
-            launcher.SetConnectionStatus(FusionLauncher.ConnectionStatus.Loaded, "");
+            launcher.SetConnectionStatus(FishnetLauncher.ConnectionStatus.Loaded, "");
 
             // Activate the next level
             _currentLevel = FindObjectOfType<LevelBehaviour>();

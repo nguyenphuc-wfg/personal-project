@@ -1,5 +1,5 @@
 using Fusion;
-using FishNetworking.FusionHelpers;
+using FishNetworking.FishnetHelpers;
 using FishNetworking.UIHelpers;
 using Tanknarok.UI;
 using TMPro;
@@ -22,7 +22,7 @@ namespace FishNetworking.Tanknarok
         [SerializeField] private Panel _uiRoom;
         [SerializeField] private GameObject _uiGame;
 
-        private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
+        private FishnetLauncher.ConnectionStatus _status = FishnetLauncher.ConnectionStatus.Disconnected;
         private GameMode _gameMode;
 
         private void Awake()
@@ -32,7 +32,7 @@ namespace FishNetworking.Tanknarok
 
         private void Start()
         {
-            OnConnectionStatusUpdate(null, FusionLauncher.ConnectionStatus.Disconnected, "");
+            OnConnectionStatusUpdate(null, FishnetLauncher.ConnectionStatus.Disconnected, "");
         }
 
         private void Update()
@@ -44,7 +44,7 @@ namespace FishNetworking.Tanknarok
                     NetworkRunner runner = FindObjectOfType<NetworkRunner>();
                     if (runner != null && !runner.IsShutdown)
                     {
-                        // Calling with destroyGameObject false because we do this in the OnShutdown callback on FusionLauncher
+                        // Calling with destroyGameObject false because we do this in the OnShutdown callback on FishnetLauncher
                         runner.Shutdown(false);
                     }
                 }
@@ -79,9 +79,9 @@ namespace FishNetworking.Tanknarok
         {
             if (GateUI(_uiRoom))
             {
-                FusionLauncher launcher = FindObjectOfType<FusionLauncher>();
+                FishnetLauncher launcher = FindObjectOfType<FishnetLauncher>();
                 if (launcher == null)
-                    launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
+                    launcher = new GameObject("Launcher").AddComponent<FishnetLauncher>();
 
                 LevelManager lm = FindObjectOfType<LevelManager>();
                 lm.launcher = launcher;
@@ -104,7 +104,7 @@ namespace FishNetworking.Tanknarok
             return true;
         }
 
-        private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
+        private void OnConnectionStatusUpdate(NetworkRunner runner, FishnetLauncher.ConnectionStatus status, string reason)
         {
             if (!this)
                 return;
@@ -115,10 +115,10 @@ namespace FishNetworking.Tanknarok
             {
                 switch (status)
                 {
-                    case FusionLauncher.ConnectionStatus.Disconnected:
+                    case FishnetLauncher.ConnectionStatus.Disconnected:
                         ErrorBox.Show("Disconnected!", reason, () => { });
                         break;
-                    case FusionLauncher.ConnectionStatus.Failed:
+                    case FishnetLauncher.ConnectionStatus.Failed:
                         ErrorBox.Show("Error!", reason, () => { });
                         break;
                 }
@@ -170,27 +170,27 @@ namespace FishNetworking.Tanknarok
 
             switch (_status)
             {
-                case FusionLauncher.ConnectionStatus.Disconnected:
+                case FishnetLauncher.ConnectionStatus.Disconnected:
                     _progress.text = "Disconnected!";
                     intro = true;
                     break;
-                case FusionLauncher.ConnectionStatus.Failed:
+                case FishnetLauncher.ConnectionStatus.Failed:
                     _progress.text = "Failed!";
                     intro = true;
                     break;
-                case FusionLauncher.ConnectionStatus.Connecting:
+                case FishnetLauncher.ConnectionStatus.Connecting:
                     _progress.text = "Connecting";
                     progress = true;
                     break;
-                case FusionLauncher.ConnectionStatus.Connected:
+                case FishnetLauncher.ConnectionStatus.Connected:
                     _progress.text = "Connected";
                     progress = true;
                     break;
-                case FusionLauncher.ConnectionStatus.Loading:
+                case FishnetLauncher.ConnectionStatus.Loading:
                     _progress.text = "Loading";
                     progress = true;
                     break;
-                case FusionLauncher.ConnectionStatus.Loaded:
+                case FishnetLauncher.ConnectionStatus.Loaded:
                     running = true;
                     break;
             }

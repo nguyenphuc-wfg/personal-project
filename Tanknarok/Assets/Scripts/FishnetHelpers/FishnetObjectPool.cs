@@ -3,12 +3,12 @@ using Fusion;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FishNetworking.FusionHelpers
+namespace FishNetworking.FishnetHelpers
 {
     /// <summary>
     /// Pool of all free instances of a single type of NetworkObject's
     /// </summary>
-    public class FusionObjectPool
+    public class FishnetObjectPool
     {
         private List<NetworkObject> _free = new List<NetworkObject>();
 
